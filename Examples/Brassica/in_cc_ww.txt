@@ -1,0 +1,12 @@
+cc_ww_drivers_drought_validation.txt
+1
+cc.p
+param_mod
+cc_ww_drought_valid_expt
+200000
+covfile1
+0.2
+0.25
+30
+1000
+0
