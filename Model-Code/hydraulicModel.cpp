@@ -2246,8 +2246,8 @@ void HydraulicModel::setup( 	bool reset, outputStruct &ecrit_k_psi, outputStruct
       	ptarg = midday_at_sat_kl;
 
       	e = e_at_saturated_kl;
-	//e *= max(sqrt(treesParams.lai+0.00000001),treesParams.lai);
-	e *= treesParams.lai;
+	e *= max(sqrt(treesParams.lai+0.00000001),treesParams.lai);
+	//e *= treesParams.lai;
 
     	rr = 0.0001;                           //root radius in m
       	rzw = rhizosphere_width;
