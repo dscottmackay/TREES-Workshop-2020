@@ -112,6 +112,7 @@
 1.00 13710.0 29460.0 Cstem, kg ha-1
 1.0 2.0 Csapwood, kg ha-1
 0.00120 0.0009 0.00216 0.1 Croot_coarse_frac, dim
+0.0000001 interception_per_leafArea, m m2 m-2
 0.005 0.005 0.05 litter_capacity, m
 0.17 0.48 theta_deep0, initial
 0.19 0.48 theta_mid0, initial
@@ -143,7 +144,7 @@
 0.0015 melt_Rcoef, m degC-1 30-min-1
 1 0 1 useHydraulics, set to 1 if you want the full hydraulic model
 0 0 1 useInputStress, little used function allowing for use of previously computed water stress as input
-1 0 1 useRefilling, set to 1 if you would like refilling to occur
+1 0 1 useInputWaterTable
 213  dayToStopMaizeRefilling, used when both usePhenology and useLeafModule are set to zero (false)
 0 0 1 useLeafModule, use Brassica rapa vegetative growth sub-model
 11.211 leafAreaMax // K
