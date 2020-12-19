@@ -630,8 +630,8 @@ cout << "leafBiomassCarbon[0] = " << leafBiomassCarbon[0] << "; " << leafBiomass
 
                 	fineRootBiomassCarbon[j][k] = 0.0;
                 	fineRootBiomassNitrogen[j][k] = 0.0;
-                	coarseRootBiomassCarbon[j][k] = treesParams.Croot_coarse * treesParams.ar[j+3] * maximumRootBiomassCarbon[j][k]/sumMaxC * 0.90;
-                	coarseRootBiomassCarbon[j][k] += treesParams.Croot_coarse * treesParams.drax[j+3]/totDepth * 0.10;
+                	coarseRootBiomassCarbon[j][k] = treesParams.Croot_coarse * treesParams.ar[j+3] * maximumRootBiomassCarbon[j][k]/sumMaxC * 0.99;
+                	coarseRootBiomassCarbon[j][k] += treesParams.Croot_coarse * treesParams.drax[j+3]/totDepth * 0.01;
 			if (coarseRootBiomassCarbon[j][k] > maximumRootBiomassCarbon[j][k])
 			{
 				coarseRootBiomassCarbon[j][k] = maximumRootBiomassCarbon[j][k];
@@ -1992,7 +1992,7 @@ double BiogeochemicalCycles::computeRootArea(trees_params treesParams,
 //m2 root area m-2 ground area = 
 //      kgC root m-2 ground area * m-2 ground area * m2 root m-2 ground area kgC-1 root
 //
-	rootArea[j][k] = 0.001;
+	rootArea[j][k] = 0.0000001;
 	if (treesParams.drlat[j+3] > 0.0001)
 	{
 		rootArea[j][k] = 0.0001 * rootCarbon * SRA;
@@ -3624,16 +3624,8 @@ void BiogeochemicalCycles::updateLeafCarbonNitrogenPools(trees_params& treesPara
 //Instantaneous SLA for the current leaf expansion
 //This should depend on factors that affect leaf expansion rate, photosynthesis, and carbon allocation to leaf
 //
-		//SLA_instant = treesParams.SLA_max - (treesParams.SLA_max-treesParams.SLA_min) * treesParams.lai/treesParams.lai_at_full_canopy_height;
-		//SLA_instant = treesParams.SLA_max - (treesParams.SLA_max-treesParams.SLA_min) * min(1.0,delta_lai/0.06);
-/*
-		SLA_instant = delta_lai / (0.4*0.0001*(getChloroplastStarch()+getChloroplastSugar())/12.0+0.0000001);
-		SLA_instant *= RL * N_avail_rate_plant;
-		if (SLA_instant < treesParams.SLA_min) SLA_instant = treesParams.SLA_min;
-		if (SLA_instant > treesParams.SLA_max) SLA_instant = treesParams.SLA_max;
-*/
 		SLA_instant = treesParams.SLA_instant;
-		
+
 		//delta_nsc = RL * delta_lai / treesParams.SLA * 10000.0 * (1.0/0.86);
 		delta_nsc = delta_lai / SLA_instant * 10000.0 * (1.0/0.86);
 

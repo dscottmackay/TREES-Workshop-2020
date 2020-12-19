@@ -404,8 +404,8 @@ double calc_GSI(double photoPeriod,
 	}
 */
 
-	lwpmin = -2.875;
-	lwpmax = -0.61;
+	lwpmin = -6.0;
+	lwpmax = -1.0;
 	if (gsi_lwp <= lwpmin)
 	{
 		lwp_indicator = 0.0;

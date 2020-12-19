@@ -224,6 +224,7 @@ struct trees_params {
 	double Cstem;
 	double Csapwood;
 	double Croot_coarse_frac;
+	double interception_per_leafArea;
 	double litter_capacity;
 	double litter_capacity_init;
 	double theta_deep0;
@@ -253,6 +254,7 @@ struct trees_params {
 	bool useHydraulics;
 	bool useInputStress;
 	bool useRefilling;
+	bool useInputWaterTable;
 	bool forceRefilling;
 	int dayToStopMaizeRefilling;
 	bool updatedHydraulics;

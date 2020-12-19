@@ -216,6 +216,7 @@ void simulator(Data_Store& in_data,
 	treesParams.Croot_coarse_frac = current_params[i].get_value(); i++;//
 	treesParams.Croot_coarse = treesParams.Croot_coarse_frac * treesParams.Cbelowground;
 	treesParams.Csoil = (1.0-treesParams.Clitter_frac - treesParams.Croot_frac - treesParams.Croot_coarse_frac) * treesParams.Cbelowground;
+	treesParams.interception_per_leafArea = current_params[i].get_value(); i++;//
 	treesParams.litter_capacity = current_params[i].get_value(); i++;//
 	treesParams.litter_capacity_init = treesParams.litter_capacity;
 	treesParams.theta_deep0 = current_params[i].get_value(); i++;//
@@ -223,6 +224,7 @@ void simulator(Data_Store& in_data,
 	treesParams.theta_shallow0 = current_params[i].get_value(); i++;//
 	treesParams.litter_store0 = current_params[i].get_value(); i++;//
 	treesParams.SLA = current_params[i].get_value(); i++;  //
+	treesParams.SLA_instant = treesParams.SLA;
 	treesParams.SRL1 = current_params[i].get_value(); i++;  //
 	treesParams.minRootDiam = current_params[i].get_value(); i++;  //
 	treesParams.maxRootDiam = current_params[i].get_value(); i++;  //
@@ -262,7 +264,7 @@ void simulator(Data_Store& in_data,
 //Run with full hydraulics or not (1 = yes, 0 = no)
 	treesParams.useHydraulics = (bool) current_params[i].get_value(); i++; //
 	treesParams.useInputStress = (bool) current_params[i].get_value(); i++; //
-	treesParams.useRefilling = (bool) current_params[i].get_value(); i++; //
+	treesParams.useInputWaterTable = (bool) current_params[i].get_value(); i++; //
 	treesParams.dayToStopMaizeRefilling = current_params[i].get_value(); i++; //
 //Leaf growth module parameters
         treesParams.useLeafModule = (bool) current_params[i].get_value(); i++; //
@@ -833,6 +835,7 @@ void simulator(Data_Store& in_data,
         treesParams.Croot_coarse_frac = current_params[i].get_value(); i++;//
         treesParams.Croot_coarse = treesParams.Croot_coarse_frac * treesParams.Cbelowground;
         treesParams.Csoil = (1.0-treesParams.Clitter_frac - treesParams.Croot_frac - treesParams.Croot_coarse_frac) * treesParams.Cbelowground;
+	treesParams.interception_per_leafArea = current_params[i].get_value(); i++;//
         treesParams.litter_capacity = current_params[i].get_value(); i++;//
 	treesParams.litter_capacity_init = treesParams.litter_capacity;
         treesParams.theta_deep0 = current_params[i].get_value(); i++;//
@@ -840,6 +843,7 @@ void simulator(Data_Store& in_data,
         treesParams.theta_shallow0 = current_params[i].get_value(); i++;//
         treesParams.litter_store0 = current_params[i].get_value(); i++;//
         treesParams.SLA = current_params[i].get_value(); i++;  //
+	treesParams.SLA_instant = treesParams.SLA;
         treesParams.SRL1 = current_params[i].get_value(); i++;  //
         treesParams.minRootDiam = current_params[i].get_value(); i++;  //
         treesParams.maxRootDiam = current_params[i].get_value(); i++;  //
@@ -880,7 +884,7 @@ void simulator(Data_Store& in_data,
 //Run with full hydraulics or not (1 = yes, 0 = no)
         treesParams.useHydraulics = (bool) current_params[i].get_value(); i++; //
         treesParams.useInputStress = (bool) current_params[i].get_value(); i++; //
-        treesParams.useRefilling = (bool) current_params[i].get_value(); i++; //
+        treesParams.useInputWaterTable = (bool) current_params[i].get_value(); i++; //
         treesParams.dayToStopMaizeRefilling = current_params[i].get_value(); i++; //
 	treesParams.allowLeafRefilling = true;
 //Leaf growth module parameters
@@ -1830,6 +1834,7 @@ void simulator(Data_Store& in_data,
         treesParams.Croot_coarse_frac = current_params[i].get_value(); i++;//
         treesParams.Croot_coarse = treesParams.Croot_coarse_frac * treesParams.Cbelowground;
         treesParams.Csoil = (1.0-treesParams.Clitter_frac - treesParams.Croot_frac - treesParams.Croot_coarse_frac) * treesParams.Cbelowground;
+	treesParams.interception_per_leafArea = current_params[i].get_value(); i++;//
         treesParams.litter_capacity = current_params[i].get_value(); i++;//
 	treesParams.litter_capacity_init = treesParams.litter_capacity;
         treesParams.theta_deep0 = current_params[i].get_value(); i++;//
@@ -1837,6 +1842,7 @@ void simulator(Data_Store& in_data,
         treesParams.theta_shallow0 = current_params[i].get_value(); i++;//
         treesParams.litter_store0 = current_params[i].get_value(); i++;//
         treesParams.SLA = current_params[i].get_value(); i++;  //
+	treesParams.SLA_instant = treesParams.SLA;
         treesParams.SRL1 = current_params[i].get_value(); i++;  //
         treesParams.minRootDiam = current_params[i].get_value(); i++;  //
         treesParams.maxRootDiam = current_params[i].get_value(); i++;  //
@@ -1874,7 +1880,7 @@ void simulator(Data_Store& in_data,
 //Run with full hydraulics or not (1 = yes, 0 = no)
         treesParams.useHydraulics = (bool) current_params[i].get_value(); i++; //
         treesParams.useInputStress = (bool) current_params[i].get_value(); i++; //
-        treesParams.useRefilling = (bool) current_params[i].get_value(); i++; //
+        treesParams.useInputWaterTable = (bool) current_params[i].get_value(); i++; //
         treesParams.dayToStopMaizeRefilling = current_params[i].get_value(); i++; //
 //Leaf growth module parameters
         treesParams.useLeafModule = (bool) current_params[i].get_value(); i++; //

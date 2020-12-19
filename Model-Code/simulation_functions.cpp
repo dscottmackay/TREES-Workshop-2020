@@ -522,17 +522,20 @@ struct sim_out simulation_functions(
 //Force water table to just below the rooting depth
 //This overrides the input Zw in the meteorological file
 //  -- comment this out if your input Zw is reliable (e.g. from observations, groundwater model, etc)
-//	Zw = Droot-0.01;
+	if (treesParams.useInputWaterTable == false)
+	{
+//		Zw = Droot-0.01;
 //Add capillary fringe to water table depth to make Zw the top of the capillary fringe
-	//Zw = Droot+capFringe-0.1*rootDepth[rmodules-1];
-	//Zw = Droot+0.01+capFringe;
-//	Zw = Droot;
+		Zw = Droot+capFringe-0.1*rootDepth[rmodules-1];
+//		Zw = Droot+0.01+capFringe;
+//		Zw = Droot;
+	}
 
 //********************************************************************************************
 //INTERCEPTION - calculate how much water is intercepted by the canopy
 // DSM May 2010
 //********************************************************************************************
-	canopy_store_max = lai*0.00025;
+	canopy_store_max = lai*treesParams.interception_per_leafArea;
 	eff_precip = compute_effective_precipitation(state, treesParams, canopy_store_max, precip, t_ref);
 
 //DRAINAGE: precipitation --> litter layer --> shallow soil layer --> deep soil layer
@@ -935,6 +938,7 @@ struct sim_out simulation_functions(
 //
 
 //This if{} is suspect. Negative KL can occur at night when net flow 
+			state.set_val_at(leafpsi, LPSI);
 			if (HydraulicModelFailCond == 0)
 			{
 				if (isnan(Kl))
@@ -1141,6 +1145,8 @@ struct sim_out simulation_functions(
 //adjust quantum yield based on water stress
 		adj_phiJ_sun = phiJ_sun*min(1.0, water_stress);
 		adj_phiJ_shd = phiJ_shd*min(1.0, water_stress);
+adj_phiJ_sun = phiJ_sun;
+adj_phiJ_shd = phiJ_shd;
 
 //reset lnc to Nleaf, if you think Vcmax is unaffected by environmental conditions
 	//	in.lnc = Nleaf;
