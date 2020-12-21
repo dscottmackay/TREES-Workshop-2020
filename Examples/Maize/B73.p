@@ -82,9 +82,9 @@
 1.889 1.5 ax_Root-c_value_(weibull)
 1.522 1.383 1.5 lat_Root-b_value_(weibull)
 1.889 1.48 1.5 lat_Root-c_value_(weibull)
-20.0 initial_conductivity(root), used to set saturated K's
+10.0 initial_conductivity(root), used to set saturated K's
 0.02 decrement(root)- default 0.001
-30.0 initial_conductivity(shoot), used to set saturated K's
+15.0 initial_conductivity(shoot), used to set saturated K's
 0.03 decrement(shoot)
 0.22 0.05 0.48 theta_opt
 30.0 25.0 45.0 optimal_soil_T
