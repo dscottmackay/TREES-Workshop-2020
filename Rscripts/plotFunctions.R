@@ -9,7 +9,7 @@ plotDaily <- function(data, title, plotname, dayOffset)
   exp_list <- c(as.expression(bquote(Psi[MD]~"(MPa)" )),
                 as.expression(bquote(italic(E)[C]~"or"~italic(E)[Crit]~"("~"mmol" ~s^-1~")" )),
                 as.expression(bquote("Relative root area" )),
-                as.expression(bquote("Fine root C (gC "~m^-2 ~")" )),
+                as.expression(bquote("Leaf and FR C (gC "~m^-2 ~")" )),
                 as.expression(bquote("LAI ("~m^2 ~m^-2~")" )),
                 as.expression(bquote("Reproduction (gC "~m^-2 ~")" )),
                 as.expression(bquote("Plant N (gN "~m^-2 ~")" )),
@@ -30,8 +30,10 @@ plotDaily <- function(data, title, plotname, dayOffset)
   rc2 <- as.matrix(data$FinRootC2..gC.m.2.grd.)
   rc3 <- as.matrix(data$FinRootC3..gC.m.2.grd.)
   rc4 <- as.matrix(data$FinRootC4..gC.m.2.grd.)
-  ylow0 <- min(c(rc0,rc1,rc2,rc3,rc4))
-  yhigh0 <- max(c(rc0,rc1,rc2,rc3,rc4))
+  rc <- as.matrix(rc0+rc1+rc2+rc3+rc4)
+  lc <- as.matrix((data$LAI..m2.m.2.)/(data$SLA..m.2.kgC.)*1000)
+  ylow0 <- min(c(rc0,rc1,rc2,rc3,rc4,lc))
+  yhigh0 <- max(c(rc0,rc1,rc2,rc3,rc4,lc))
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   layout(matrix(1:3, ncol = 1, nrow=3), widths = rep(1, 3), heights = c(1.2,1.2,1.2), respect = FALSE)
@@ -40,10 +42,12 @@ plotDaily <- function(data, title, plotname, dayOffset)
   plot(data$DAY+dayOffset,rc0,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
        ylim=c(ylow,yhigh), ylab=exp_list[4],xaxt="n")
   mtext(title,side=3,cex=1.0, adj=0, line=0.25)
-  lines(data$DAY+dayOffset,rc1, lwd=2, lty=1, col="darkgreen")
-  lines(data$DAY+dayOffset,rc2, lwd=2, lty=1, col="green4")
-  lines(data$DAY+dayOffset,rc3, lwd=2, lty=1, col="green3")
-  lines(data$DAY+dayOffset,rc4, lwd=2, lty=1, col="green")
+  lines(data$DAY+dayOffset,rc1, lwd=2, lty=1, col="tan4")
+  lines(data$DAY+dayOffset,rc2, lwd=2, lty=1, col="tan3")
+  lines(data$DAY+dayOffset,rc3, lwd=2, lty=1, col="tan2")
+  lines(data$DAY+dayOffset,rc4, lwd=2, lty=1, col="tan1")
+  lines(data$DAY+dayOffset,rc, lwd=2, lty=2, col="tan4")
+  lines(data$DAY+dayOffset,lc, lwd=2, lty=1, col="darkgreen")
   box(lwd=1.5)
   
   ylow0 <- min(data$YMD..MPa.)
