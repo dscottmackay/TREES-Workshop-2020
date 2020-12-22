@@ -2223,11 +2223,13 @@ void simulator(Data_Store& in_data,
 	state.clear_values();
         delete hydraulicModel;
         delete[] nodeTyp;
+/*
         if (treesParams.useHydraulics == true)
         {
                 free3DArray(psi, NREC, MD);
                 free2DArray(rflux, NREC);
         }
+*/
 } //end simulator
 
 

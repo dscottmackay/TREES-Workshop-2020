@@ -588,20 +588,21 @@ int main()
 		hydrout << "\n";
         
         
-        lfareaout << "ti\t";
-        for (i = 1; i < 500; i++)
-        {
-            lfareaout << "Area_Leaf_" << i << "\t";
-        }
-        lfareaout << "\n";
+        	lfareaout << "ti\t";
+        	for (i = 1; i < 500; i++)
+        	{
+            		lfareaout << "Area_Leaf_" << i << "\t";
+        	}
+        	lfareaout << "\n";
 
 		simulator(indata, state, currp, treesParams, Ecframe, NEEframe, fluxout, hydrout, lfareaout);
 		fluxout.close();
 		hydrout.close();
-        lfareaout.close();
+        	lfareaout.close();
 		cout << "\nSimulated values in " << sfile << endl;
 		cout << "\nHydraulic diagnostics in " << hfile << endl;
 	}//end if(rp==0)
+	cout << "Simulation completed" << endl;
 	delete [] currp;
 	return 1;
 }
