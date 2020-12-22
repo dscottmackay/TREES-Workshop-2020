@@ -76,7 +76,7 @@ plotDaily <- function(data, title, plotname, dayOffset)
 #
 #
 #
-plotLeafGrowth <- function(subfolder, fname, title, plotname, dayOffset)
+plotLeafGrowth <- function(subfolder, fname1, fname2, title, plotname, dayOffset)
 {
   #
   #Define some y-axis labels
@@ -95,65 +95,104 @@ plotLeafGrowth <- function(subfolder, fname, title, plotname, dayOffset)
                 as.expression(bquote("GPP (umol "~m^-2 ~"gnd" ~s^-1 ~")" )),
                 as.expression(bquote(italic(E)[C] ~" (mmol "~m^-2 ~"gnd" ~s^-1 ~")" )),
                 as.expression(bquote("Leaf Area ("~cm^2~")" )),
-                as.expression(bquote("SLA ("~m^2 ~kgC^-1~")" )))
+                as.expression(bquote("SLA ("~m^2 ~kgC^-1~")" )),
+                as.expression(bquote("C:N ("~kgC^2 ~kgN^-1~")" )))
   
-  leaf<-read.table(paste(subfolder,fname,".leaf",sep=""),header=TRUE,fill=TRUE)
-  sim<-read.table(paste(subfolder,fname,".sim",sep=""),header=TRUE)
+  leaf1<-read.table(paste(subfolder,fname1,".leaf",sep=""),header=TRUE,fill=TRUE)
+  leaf2<-read.table(paste(subfolder,fname2,".leaf",sep=""),header=TRUE,fill=TRUE)
+  sim1<-read.table(paste(subfolder,fname1,".sim",sep=""),header=TRUE)
+  sim2<-read.table(paste(subfolder,fname2,".sim",sep=""),header=TRUE)
   
-  nrows <- length(sim[,1])
+  nrows <- length(sim1[,1])
   for(i in 1:nrows)
   {
-    sim[i,1] <- dayOffset + (i-1)/48
+    sim1[i,1] <- dayOffset + (i-1)/48
   }
   #
   #Plot LAI, midday water potential, and GPP for 13 genotypes of maize
   #
   pdf(plotname, width = 5, height= 6.75, useDingbats = F)
   
-  al1 <- as.matrix(leaf$Area_Leaf_1)
-  al2 <- as.matrix(leaf$Area_Leaf_2)
-  al3 <- as.matrix(leaf$Area_Leaf_3)
-  al4 <- as.matrix(leaf$Area_Leaf_4)
-  al5 <- as.matrix(leaf$Area_Leaf_5)
-  al6 <- as.matrix(leaf$Area_Leaf_6)
-  al7 <- as.matrix(leaf$Area_Leaf_7)
-  ylow0 <- min(c(al1,al2,al3,al4,al5,al6,al7), na.rm=TRUE)
-  yhigh0 <- max(c(al1,al2,al3,al4,al5,al6,al7), na.rm=TRUE)
+  al1 <- as.matrix(leaf1$Area_Leaf_1)
+  al2 <- as.matrix(leaf1$Area_Leaf_2)
+  al3 <- as.matrix(leaf1$Area_Leaf_3)
+  al4 <- as.matrix(leaf1$Area_Leaf_4)
+  al5 <- as.matrix(leaf1$Area_Leaf_5)
+  al6 <- as.matrix(leaf1$Area_Leaf_6)
+  al7 <- as.matrix(leaf1$Area_Leaf_7)
+  all1 <- as.matrix(leaf2$Area_Leaf_1)
+  all2 <- as.matrix(leaf2$Area_Leaf_2)
+  all3 <- as.matrix(leaf2$Area_Leaf_3)
+  all4 <- as.matrix(leaf2$Area_Leaf_4)
+  all5 <- as.matrix(leaf2$Area_Leaf_5)
+  all6 <- as.matrix(leaf2$Area_Leaf_6)
+  all7 <- as.matrix(leaf2$Area_Leaf_7)
+  ylow0 <- min(c(al1,al2,al3,al4,al5,al6,al7,all1,all2,all3,all4,all5,all6,all7), na.rm=TRUE)
+  yhigh0 <- max(c(al1,al2,al3,al4,al5,al6,al7,all1,all2,all3,all4,all5,all6,all7), na.rm=TRUE)
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   layout(matrix(1:3, ncol = 1, nrow=3), widths = rep(1, 3), heights = c(1.2,1.2,1.2), respect = FALSE)
   par(oma=c(6.1,1.1,2,.1))
   par(mar = c(0.0, 4.8, 0.0, 2.1))
-  plot(sim[,1],al1,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
+  plot(sim1[,1],al1,type="l",lwd=2, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
        ylim=c(ylow,yhigh), ylab=exp_list[14],xaxt="n")
   mtext(title,side=3,cex=1.0, adj=0, line=0.25)
-  lines(sim[,1],al2, lwd=2, lty=1, col="darkgreen")
-  lines(sim[,1],al3, lwd=2, lty=1, col="green4")
-  lines(sim[,1],al4, lwd=2, lty=1, col="green3")
-  lines(sim[,1],al5, lwd=2, lty=1, col="green")
-  lines(sim[,1],al6, lwd=2, lty=1, col="green")
-  lines(sim[,1],al7, lwd=2, lty=1, col="green")
+  lines(sim1[,1],al2, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],al3, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],al4, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],al5, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],al6, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],al7, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],all1, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all2, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all3, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all4, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all5, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all6, lwd=2, lty=1, col="green")
+  lines(sim1[,1],all7, lwd=2, lty=1, col="green")
   box(lwd=1.5)
   
-  ylow0 <- min(sim$LAI)
-  yhigh0 <- max(sim$LAI)
+  al1 <- as.matrix(sim1$FineRootCN0)
+  al2 <- as.matrix(sim1$FineRootCN1)
+  al3 <- as.matrix(sim1$FineRootCN2)
+  al4 <- as.matrix(sim1$FineRootCN3)
+  al5 <- as.matrix(sim1$FineRootCN4)
+  al6 <- as.matrix(sim1$LeafCN)
+  all1 <- as.matrix(sim2$FineRootCN0)
+  all2 <- as.matrix(sim2$FineRootCN1)
+  all3 <- as.matrix(sim2$FineRootCN2)
+  all4 <- as.matrix(sim2$FineRootCN3)
+  all5 <- as.matrix(sim2$FineRootCN4)
+  all6 <- as.matrix(sim2$LeafCN)
+  ylow0 <- min(c(al1,al2,al3,al4,al5,al6,all1,all2,all3,all4,all5,all6), na.rm=TRUE)
+  yhigh0 <- max(c(al1,al2,al3,al4,al5,al6,all1,all2,all3,all4,all5,all6), na.rm=TRUE)
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
-  plot(sim[,1],sim$LAI,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
-       ylim=c(ylow,yhigh), ylab=exp_list[5],xaxt='n')
-  #lines(data$DAY+dayOffset,data$YPD..MPa., lwd=2, lty=1, col="darkblue")
+  plot(sim1[,1],al1,type="l",lwd=2, lty=1, col="tan4", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[16],xaxt='n')
+  lines(sim1[,1],al2, lwd=2, lty=1, col="tan4")
+  lines(sim1[,1],al3, lwd=2, lty=1, col="tan4")
+  lines(sim1[,1],al4, lwd=2, lty=1, col="tan4")
+  lines(sim1[,1],al5, lwd=2, lty=1, col="tan4")
+  lines(sim1[,1],al6, lwd=2, lty=1, col="darkgreen")
+  lines(sim1[,1],all1, lwd=2, lty=1, col="tan2")
+  lines(sim1[,1],all2, lwd=2, lty=1, col="tan2")
+  lines(sim1[,1],all3, lwd=2, lty=1, col="tan2")
+  lines(sim1[,1],all4, lwd=2, lty=1, col="tan2")
+  lines(sim1[,1],all5, lwd=2, lty=1, col="tan2")
+  lines(sim1[,1],all6, lwd=2, lty=1, col="green")
   #lines(data$DAY+dayOffset,data$YMD..MPa., lwd=2, lty=1, col="blue")
   box(lwd=1.5)
   
-  ylow0 <- min(sim$SLA)
-  yhigh0 <- max(sim$SLA)
+  ylow0 <- min(c(sim1$SLA,sim2$SLA))
+  yhigh0 <- max(c(sim1$SLA,sim2$SLA))
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
-  plot(sim[,1],sim$SLA,type="l",lwd=1, lty=2, col="darkblue", cex.axis=1.5, cex.lab=1.5, 
+  plot(sim1[,1],sim1$SLA,type="l",lwd=1, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
        ylim=c(ylow,yhigh), ylab=exp_list[15])
-  #lines(data$DAY+dayOffset,data$ECRIT..mmol.s.1., lwd=2, lty=1, col="darkred")
+  lines(sim1[,1],sim2$SLA, lwd=2, lty=1, col="green")
   #lines(data$DAY+dayOffset,data$EC..mmol.s.1., lwd=2, lty=1, col="darkblue")
   mtext("Day", side=1, line=3, cex=1.25)
   box(lwd=1.5)
