@@ -31,7 +31,7 @@ TREES-workshop-2020/
     Maize/
     Pinon/
   Model-Code/
-  R-Scripts/
+  Rscripts/
   Graphics/
   
 With the above file organization unzipped on your computer, you can run TREES for the Brassica example by entering:
