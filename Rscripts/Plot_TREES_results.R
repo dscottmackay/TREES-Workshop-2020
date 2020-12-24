@@ -9,7 +9,7 @@ setwd(paste("~/Documents/research/projects/TREES-workshop-2020/",sep=""))
 source("Rscripts/plotFunctions.R")
 
 #
-#Plot leaf growth, C:N, and SLA results for Brassica (Chinese Cabbage)
+#Run these lines to plot leaf growth, C:N, and SLA results for Brassica (Chinese Cabbage)
 #
 subfolder <- "Examples/Brassica/"
 fname1 <- "cc_ww_drought_valid_expt"
@@ -31,14 +31,10 @@ plotDaily(cc, title, plotname,122)
 # Run these lines for pinon
 #
 pinon <- read.csv(paste("Examples/Pinon/"," ap2012 _midday",".csv",sep=""),header=TRUE)
-title <- "SUMO Pinon 2012 - Groundwater Access"
-plotname <- "Graphics/pinon.pdf"
-plotDaily(pinon, title, plotname, 0)
-
 pinon_noGW <- read.csv(paste("Examples/Pinon/"," ap2012_noGW _midday",".csv",sep=""),header=TRUE)
-title <- "SUMO Pinon 2012 - No Groundwater Access"
-plotname <- "Graphics/pinon_noGW.pdf"
-plotDaily(pinon_noGW, title, plotname, 0)
+title <- "SUMO Pinon 2012"
+plotname <- "Graphics/pinon2.pdf"
+plotDaily2(pinon, pinon_noGW, title, plotname, 0)
 
 
 #
@@ -46,18 +42,11 @@ plotDaily(pinon_noGW, title, plotname, 0)
 #Note: These scripts assume you have already run Aggregate_to_Daily.R 
 #
 B73 <- read.csv(paste("Examples/Maize/"," B73 _midday",".csv",sep=""),header=TRUE)
-title <- "B73 Maize, LIRF 2013"
-plotname <- "Graphics/B73.pdf"
-plotDaily(B73, title, plotname,151)
-
-#
-#Plot midday simulation results
-#Note: These scripts assume you have already run Aggregate_to_Daily.R 
-#
 MO18W <- read.csv(paste("Examples/Maize/"," MO18W _midday",".csv",sep=""),header=TRUE)
-title <- "MO18W Maize, LIRF 2013"
-plotname <- "Graphics/MO18W.pdf"
-plotDaily(MO18W, title, plotname,151)
+title <- "Maize, LIRF 2013"
+plotname <- "Graphics/B73&M018W.pdf"
+plotDaily3(B73, MO18W, title, plotname,151)
+
 
 
 

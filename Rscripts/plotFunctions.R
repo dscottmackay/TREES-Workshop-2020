@@ -50,15 +50,24 @@ plotDaily <- function(data, title, plotname, dayOffset)
   lines(data$DAY+dayOffset,lc, lwd=2, lty=1, col="darkgreen")
   box(lwd=1.5)
   
-  ylow0 <- min(data$YMD..MPa.)
-  yhigh0 <- max(data$YPD..MPa.)
+  #ylow0 <- min(data$YMD..MPa.)
+  #yhigh0 <- max(data$YPD..MPa.)
+  #ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  #yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  #Axis(side=1, labels=FALSE)
+  #plot(data$DAY+dayOffset,data$YPD..MPa.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
+  #     ylim=c(ylow,yhigh), ylab=exp_list[10],xaxt='n')
+  #lines(data$DAY+dayOffset,data$YPD..MPa., lwd=2, lty=1, col="darkblue")
+  #lines(data$DAY+dayOffset,data$YMD..MPa., lwd=2, lty=1, col="blue")
+  #box(lwd=1.5)
+  
+  ylow0 <- min(data$GPP..mmol.m.2.s.1.)
+  yhigh0 <- max(data$GPP..mmol.m.2.s.1.)
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
-  plot(data$DAY+dayOffset,data$YPD..MPa.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
-       ylim=c(ylow,yhigh), ylab=exp_list[10],xaxt='n')
-  lines(data$DAY+dayOffset,data$YPD..MPa., lwd=2, lty=1, col="darkblue")
-  lines(data$DAY+dayOffset,data$YMD..MPa., lwd=2, lty=1, col="blue")
+  plot(data$DAY+dayOffset,data$GPP..mmol.m.2.s.1.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[12],xaxt='n')
   box(lwd=1.5)
   
   ylow0 <- min(data$EC..mmol.s.1.)
@@ -76,6 +85,187 @@ plotDaily <- function(data, title, plotname, dayOffset)
   dev.off()
 }
 
+#
+#
+#
+plotDaily2 <- function(data, data2, title, plotname, dayOffset)
+{
+  #
+  #Define some y-axis labels
+  #
+  exp_list <- c(as.expression(bquote(Psi[MD]~"(MPa)" )),
+                as.expression(bquote(italic(E)[C]~"or"~italic(E)[Crit]~"("~"mmol" ~s^-1~")" )),
+                as.expression(bquote("Relative root area" )),
+                as.expression(bquote("Leaf and FR C (gC "~m^-2 ~")" )),
+                as.expression(bquote("LAI ("~m^2 ~m^-2~")" )),
+                as.expression(bquote("Reproduction (gC "~m^-2 ~")" )),
+                as.expression(bquote("Plant N (gN "~m^-2 ~")" )),
+                as.expression(bquote("NSC (gC "~m^-2 ~")" )),
+                as.expression(bquote(italic(E)[C]~"or"~italic(F)[Rhiz]~"("~"mmol" ~s^-1~")" )),
+                as.expression(bquote(Psi[Leaf]~"(MPa)" )),
+                as.expression(bquote("PLC (%)")),
+                as.expression(bquote("GPP (umol "~m^-2 ~"gnd" ~s^-1 ~")" )),
+                as.expression(bquote(italic(E)[C] ~" (mmol "~m^-2 ~"gnd" ~s^-1 ~")" )))
+  
+  #
+  #Plot LAI, midday water potential, and GPP for 13 genotypes of maize
+  #
+  pdf(plotname, width = 5, height= 6.75, useDingbats = F)
+  
+  nscl <- as.matrix(data$Leaf.NSC..gC.m.2.)
+  nscs <- as.matrix(data$Stem.NSC..gC.m.2.)
+  nscr <- as.matrix(data$Root.NSC..gC.m.2.)
+  nscl2 <- as.matrix(data2$Leaf.NSC..gC.m.2.)
+  nscs2 <- as.matrix(data2$Stem.NSC..gC.m.2.)
+  nscr2 <- as.matrix(data2$Root.NSC..gC.m.2.)
+  ylow0 <- min(c(nscl,nscs,nscr,nscl2,nscs2,nscr2))
+  yhigh0 <- max(c(nscl,nscs,nscr,nscl2,nscs2,nscr2))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  layout(matrix(1:3, ncol = 1, nrow=3), widths = rep(1, 3), heights = c(1.2,1.2,1.2), respect = FALSE)
+  par(oma=c(6.1,1.1,2,.1))
+  par(mar = c(0.0, 4.8, 0.0, 2.1))
+  plot(data$DAY+dayOffset,nscl,type="l",lwd=2, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[8],xaxt="n")
+  mtext(title,side=3,cex=1.0, adj=0, line=0.25)
+  lines(data$DAY+dayOffset,nscs, lwd=2, lty=1, col="tan4")
+  lines(data$DAY+dayOffset,nscr, lwd=2, lty=1, col="tan2")
+  lines(data$DAY+dayOffset,nscl2, lwd=2, lty=2, col="darkgreen")
+  lines(data$DAY+dayOffset,nscs2, lwd=2, lty=2, col="tan4")
+  lines(data$DAY+dayOffset,nscr2, lwd=2, lty=2, col="tan2")
+  box(lwd=1.5)
+  
+  ylow0 <- min(c(data$YMD..MPa.,data2$YMD..MPa))
+  yhigh0 <- max(c(data$YPD..MPa.,data2$YMD..MPa))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  Axis(side=1, labels=FALSE)
+  plot(data$DAY+dayOffset,data$YPD..MPa.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[10],xaxt='n')
+  lines(data$DAY+dayOffset,data$YPD..MPa., lwd=2, lty=1, col="darkblue")
+  lines(data$DAY+dayOffset,data$YMD..MPa., lwd=2, lty=1, col="blue")
+  lines(data$DAY+dayOffset,data2$YPD..MPa., lwd=2, lty=2, col="darkblue")
+  lines(data$DAY+dayOffset,data2$YMD..MPa., lwd=2, lty=2, col="blue")
+  box(lwd=1.5)
+  
+  #ylow0 <- min(c(data$EC..mmol.s.1.,data2$EC..mmol.s.1.))
+  #yhigh0 <- max(c(data$ECRIT..mmol.s.1.,data2$ECRIT..mmol.s.1.))
+  #ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  #yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  #Axis(side=1, labels=FALSE)
+  #plot(data$DAY+dayOffset,data$EC..mmol.s.1.,type="l",lwd=1, lty=2, col="darkblue", cex.axis=1.5, cex.lab=1.5, 
+  #     ylim=c(ylow,yhigh), ylab=exp_list[13])
+  #lines(data$DAY+dayOffset,data$ECRIT..mmol.s.1., lwd=2, lty=1, col="darkred")
+  #lines(data$DAY+dayOffset,data$EC..mmol.s.1., lwd=2, lty=1, col="darkblue")
+  #lines(data$DAY+dayOffset,data2$ECRIT..mmol.s.1., lwd=2, lty=2, col="darkred")
+  #lines(data$DAY+dayOffset,data2$EC..mmol.s.1., lwd=2, lty=2, col="darkblue")
+  #mtext("Day", side=1, line=3, cex=1.25)
+  #box(lwd=1.5)
+  
+  ylow0 <- min(c(data$PLC,data2$PLC))
+  yhigh0 <- max(c(data$PLC,data2$PLC))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  Axis(side=1, labels=FALSE)
+  plot(data$DAY+dayOffset,data$PLC,type="l",lwd=2, lty=1, col="darkred", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[11])
+  lines(data$DAY+dayOffset,data2$PLC, lwd=2, lty=2, col="darkred")
+  mtext("Day", side=1, line=3, cex=1.25)
+  box(lwd=1.5)
+  
+  dev.off()
+}
+
+plotDaily3 <- function(data, data2, title, plotname, dayOffset)
+{
+  #
+  #Define some y-axis labels
+  #
+  exp_list <- c(as.expression(bquote(Psi[MD]~"(MPa)" )),
+                as.expression(bquote(italic(E)[C]~"or"~italic(E)[Crit]~"("~"mmol" ~s^-1~")" )),
+                as.expression(bquote("Relative root area" )),
+                as.expression(bquote("Leaf and FR C (gC "~m^-2 ~")" )),
+                as.expression(bquote("LAI ("~m^2 ~m^-2~")" )),
+                as.expression(bquote("Reproduction (gC "~m^-2 ~")" )),
+                as.expression(bquote("Plant N (gN "~m^-2 ~")" )),
+                as.expression(bquote("NSC (gC "~m^-2 ~")" )),
+                as.expression(bquote(italic(E)[C]~"or"~italic(F)[Rhiz]~"("~"mmol" ~s^-1~")" )),
+                as.expression(bquote(Psi[Leaf]~"(MPa)" )),
+                as.expression(bquote("PLC (%)")),
+                as.expression(bquote("GPP (umol "~m^-2 ~"gnd" ~s^-1 ~")" )),
+                as.expression(bquote(italic(E)[C] ~" (mmol "~m^-2 ~"gnd" ~s^-1 ~")" )))
+  
+  #
+  #Plot LAI, midday water potential, and GPP for 13 genotypes of maize
+  #
+  pdf(plotname, width = 5, height= 6.75, useDingbats = F)
+  
+  rc0 <- as.matrix(data$FinRootC0..gC.m.2.grd.)
+  rc1 <- as.matrix(data$FinRootC1..gC.m.2.grd.)
+  rc2 <- as.matrix(data$FinRootC2..gC.m.2.grd.)
+  rc3 <- as.matrix(data$FinRootC3..gC.m.2.grd.)
+  rc4 <- as.matrix(data$FinRootC4..gC.m.2.grd.)
+  rootc <- as.matrix(rc0+rc1+rc2+rc3+rc4)
+  leafc <- as.matrix((data$LAI..m2.m.2.)/(data$SLA..m.2.kgC.)*1000)
+  rc0 <- as.matrix(data2$FinRootC0..gC.m.2.grd.)
+  rc1 <- as.matrix(data2$FinRootC1..gC.m.2.grd.)
+  rc2 <- as.matrix(data2$FinRootC2..gC.m.2.grd.)
+  rc3 <- as.matrix(data2$FinRootC3..gC.m.2.grd.)
+  rc4 <- as.matrix(data2$FinRootC4..gC.m.2.grd.)
+  rootc2 <- as.matrix(rc0+rc1+rc2+rc3+rc4)
+  leafc2<- as.matrix((data2$LAI..m2.m.2.)/(data2$SLA..m.2.kgC.)*1000)
+  ylow0 <- min(c(rootc,leafc,rootc2,leafc2))
+  yhigh0 <- max(c(rootc,leafc,rootc2,leafc2))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  layout(matrix(1:3, ncol = 1, nrow=3), widths = rep(1, 3), heights = c(1.2,1.2,1.2), respect = FALSE)
+  par(oma=c(6.1,1.1,2,.1))
+  par(mar = c(0.0, 4.8, 0.0, 2.1))
+  plot(data$DAY+dayOffset,leafc,type="l",lwd=2, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[4],xaxt="n")
+  mtext(title,side=3,cex=1.0, adj=0, line=0.25)
+  lines(data$DAY+dayOffset,leafc2, lwd=2, lty=2, col="darkgreen")
+  lines(data$DAY+dayOffset,rootc, lwd=2, lty=1, col="tan4")
+  lines(data$DAY+dayOffset,rootc2, lwd=2, lty=2, col="tan4")
+  #plot C11 
+  points(c(186,205,227,247),c(2.159,4.513,4.201,4.706)/33*1000,
+         pch=1,col="darkgreen",cex=1.25,lwd=1.25)
+  #plot C22
+  points(c(186,205,227,247),c(2.007,3.83,NA,4.607)/33*1000,
+         pch=1,col="darkgreen",cex=1.25,lwd=1.25)
+  #plot D31
+  points(c(186,205,227,247),c(NA,3.307,4.446,4.443)/33*1000,
+         pch=1,col="darkgreen",cex=1.25,lwd=1.25)
+  #plot D43
+  points(c(186,205,227,247),c(NA,3.551,NA,4.357)/33*1000,
+         pch=1,col="darkgreen",cex=1.25,lwd=1.25)
+  box(lwd=1.5)
+  
+  ylow0 <- min(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.))
+  yhigh0 <- max(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  Axis(side=1, labels=FALSE)
+  plot(data$DAY+dayOffset,data$GPP..mmol.m.2.s.1.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[12],xaxt='n')
+  lines(data$DAY+dayOffset,data2$GPP..mmol.m.2.s.1., lwd=2, lty=2, col="black")
+  box(lwd=1.5)
+  
+  ylow0 <- min(c(data$EC..mmol.s.1.,data2$EC..mmol.s.1.))
+  yhigh0 <- max(c(data$ECRIT..mmol.s.1.,data2$ECRIT..mmol.s.1.))
+  ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  Axis(side=1, labels=FALSE)
+  plot(data$DAY+dayOffset,data$EC..mmol.s.1.,type="l",lwd=2, lty=1, col="darkblue", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[13])
+  lines(data$DAY+dayOffset,data$ECRIT..mmol.s.1., lwd=2, lty=1, col="darkred")
+  lines(data$DAY+dayOffset,data2$EC..mmol.s.1., lwd=2, lty=2, col="darkblue")
+  lines(data$DAY+dayOffset,data2$ECRIT..mmol.s.1., lwd=2, lty=2, col="darkred")
+  mtext("Day", side=1, line=3, cex=1.25)
+  box(lwd=1.5)
+  
+  dev.off()
+}
 
 #
 #
@@ -194,7 +384,7 @@ plotLeafGrowth <- function(subfolder, fname1, fname2, title, plotname, dayOffset
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
-  plot(sim1[,1],sim1$SLA,type="l",lwd=1, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
+  plot(sim1[,1],sim1$SLA,type="l",lwd=2, lty=1, col="darkgreen", cex.axis=1.5, cex.lab=1.5, 
        ylim=c(ylow,yhigh), ylab=exp_list[15])
   lines(sim1[,1],sim2$SLA, lwd=2, lty=1, col="green")
   #lines(data$DAY+dayOffset,data$EC..mmol.s.1., lwd=2, lty=1, col="darkblue")
