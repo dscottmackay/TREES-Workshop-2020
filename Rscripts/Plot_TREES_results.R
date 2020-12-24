@@ -43,9 +43,10 @@ plotDaily2(pinon, pinon_noGW, title, plotname, 0)
 #
 B73 <- read.csv(paste("Examples/Maize/"," B73 _midday",".csv",sep=""),header=TRUE)
 MO18W <- read.csv(paste("Examples/Maize/"," MO18W _midday",".csv",sep=""),header=TRUE)
+CML103 <- read.csv(paste("Examples/Maize/"," CML103 _midday",".csv",sep=""),header=TRUE)
 title <- "Maize, LIRF 2013"
-plotname <- "Graphics/B73&M018W.pdf"
-plotDaily3(B73, MO18W, title, plotname,151)
+plotname <- "Graphics/B73&M018W&CML103.pdf"
+plotDaily3(B73, MO18W, CML103, title, plotname,151)
 
 
 

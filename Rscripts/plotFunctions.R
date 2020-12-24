@@ -176,7 +176,7 @@ plotDaily2 <- function(data, data2, title, plotname, dayOffset)
   dev.off()
 }
 
-plotDaily3 <- function(data, data2, title, plotname, dayOffset)
+plotDaily3 <- function(data, data2, data3, title, plotname, dayOffset)
 {
   #
   #Define some y-axis labels
@@ -214,8 +214,15 @@ plotDaily3 <- function(data, data2, title, plotname, dayOffset)
   rc4 <- as.matrix(data2$FinRootC4..gC.m.2.grd.)
   rootc2 <- as.matrix(rc0+rc1+rc2+rc3+rc4)
   leafc2<- as.matrix((data2$LAI..m2.m.2.)/(data2$SLA..m.2.kgC.)*1000)
-  ylow0 <- min(c(rootc,leafc,rootc2,leafc2))
-  yhigh0 <- max(c(rootc,leafc,rootc2,leafc2))
+  rc0 <- as.matrix(data3$FinRootC0..gC.m.2.grd.)
+  rc1 <- as.matrix(data3$FinRootC1..gC.m.2.grd.)
+  rc2 <- as.matrix(data3$FinRootC2..gC.m.2.grd.)
+  rc3 <- as.matrix(data3$FinRootC3..gC.m.2.grd.)
+  rc4 <- as.matrix(data3$FinRootC4..gC.m.2.grd.)
+  rootc3 <- as.matrix(rc0+rc1+rc2+rc3+rc4)
+  leafc3<- as.matrix((data3$LAI..m2.m.2.)/(data3$SLA..m.2.kgC.)*1000)
+  ylow0 <- min(c(rootc,leafc,rootc2,leafc2,rootc3,leafc3))
+  yhigh0 <- max(c(rootc,leafc,rootc2,leafc2,rootc3,leafc3))
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   layout(matrix(1:3, ncol = 1, nrow=3), widths = rep(1, 3), heights = c(1.2,1.2,1.2), respect = FALSE)
@@ -225,8 +232,10 @@ plotDaily3 <- function(data, data2, title, plotname, dayOffset)
        ylim=c(ylow,yhigh), ylab=exp_list[4],xaxt="n")
   mtext(title,side=3,cex=1.0, adj=0, line=0.25)
   lines(data$DAY+dayOffset,leafc2, lwd=2, lty=2, col="darkgreen")
+  lines(data$DAY+dayOffset,leafc3, lwd=2, lty=5, col="darkgreen")
   lines(data$DAY+dayOffset,rootc, lwd=2, lty=1, col="tan4")
   lines(data$DAY+dayOffset,rootc2, lwd=2, lty=2, col="tan4")
+  lines(data$DAY+dayOffset,rootc3, lwd=2, lty=5, col="tan4")
   #plot C11 
   points(c(186,205,227,247),c(2.159,4.513,4.201,4.706)/33*1000,
          pch=1,col="darkgreen",cex=1.25,lwd=1.25)
@@ -239,28 +248,45 @@ plotDaily3 <- function(data, data2, title, plotname, dayOffset)
   #plot D43
   points(c(186,205,227,247),c(NA,3.551,NA,4.357)/33*1000,
          pch=1,col="darkgreen",cex=1.25,lwd=1.25)
+  legend("bottomright",lty=c(1,2,5),lwd=c(2,2,2), cex=0.7,
+         c("B73 - Temperate origin","MO18W - Mixed origin","CML103 - Tropical origin"))
   box(lwd=1.5)
   
-  ylow0 <- min(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.))
-  yhigh0 <- max(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.))
+  ylow0 <- min(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.,data3$GPP..mmol.m.2.s.1.))
+  yhigh0 <- max(c(data$GPP..mmol.m.2.s.1.,data2$GPP..mmol.m.2.s.1.,data3$GPP..mmol.m.2.s.1.))
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
   plot(data$DAY+dayOffset,data$GPP..mmol.m.2.s.1.,type="l",lwd=2, lty=1, col="black", cex.axis=1.5, cex.lab=1.5, 
        ylim=c(ylow,yhigh), ylab=exp_list[12],xaxt='n')
   lines(data$DAY+dayOffset,data2$GPP..mmol.m.2.s.1., lwd=2, lty=2, col="black")
+  lines(data$DAY+dayOffset,data3$GPP..mmol.m.2.s.1., lwd=2, lty=5, col="black")
   box(lwd=1.5)
   
-  ylow0 <- min(c(data$EC..mmol.s.1.,data2$EC..mmol.s.1.))
-  yhigh0 <- max(c(data$ECRIT..mmol.s.1.,data2$ECRIT..mmol.s.1.))
+  #ylow0 <- min(c(data$EC..mmol.s.1.,data2$EC..mmol.s.1.,data3$EC..mmol.s.1.))
+  #yhigh0 <- max(c(data$ECRIT..mmol.s.1.,data2$ECRIT..mmol.s.1.,data3$EC..mmol.s.1.))
+  #ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
+  #yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
+  #Axis(side=1, labels=FALSE)
+  #plot(data$DAY+dayOffset,data$EC..mmol.s.1.,type="l",lwd=2, lty=1, col="darkblue", cex.axis=1.5, cex.lab=1.5, 
+  #     ylim=c(ylow,yhigh), ylab=exp_list[13])
+  #lines(data$DAY+dayOffset,data$ECRIT..mmol.s.1., lwd=2, lty=1, col="darkred")
+  #lines(data$DAY+dayOffset,data2$EC..mmol.s.1., lwd=2, lty=2, col="darkblue")
+  #lines(data$DAY+dayOffset,data2$ECRIT..mmol.s.1., lwd=2, lty=2, col="darkred")
+  #lines(data$DAY+dayOffset,data3$EC..mmol.s.1., lwd=2, lty=5, col="darkblue")
+  #lines(data$DAY+dayOffset,data3$ECRIT..mmol.s.1., lwd=2, lty=5, col="darkred")
+  #mtext("Day", side=1, line=3, cex=1.25)
+  #box(lwd=1.5)
+  
+  ylow0 <- min(c(data$PLC,data2$PLC,data3$PLC))
+  yhigh0 <- max(c(data$PLC,data2$PLC,data3$PLC))
   ylow <- ylow0-0.05*(max(abs(ylow0),abs(yhigh0)))
   yhigh <- yhigh0+0.05*(max(abs(ylow0),abs(yhigh0)))
   Axis(side=1, labels=FALSE)
-  plot(data$DAY+dayOffset,data$EC..mmol.s.1.,type="l",lwd=2, lty=1, col="darkblue", cex.axis=1.5, cex.lab=1.5, 
-       ylim=c(ylow,yhigh), ylab=exp_list[13])
-  lines(data$DAY+dayOffset,data$ECRIT..mmol.s.1., lwd=2, lty=1, col="darkred")
-  lines(data$DAY+dayOffset,data2$EC..mmol.s.1., lwd=2, lty=2, col="darkblue")
-  lines(data$DAY+dayOffset,data2$ECRIT..mmol.s.1., lwd=2, lty=2, col="darkred")
+  plot(data$DAY+dayOffset,data$PLC,type="l",lwd=2, lty=1, col="darkred", cex.axis=1.5, cex.lab=1.5, 
+       ylim=c(ylow,yhigh), ylab=exp_list[11])
+  lines(data$DAY+dayOffset,data2$PLC, lwd=2, lty=2, col="darkred")
+  lines(data$DAY+dayOffset,data3$PLC, lwd=2, lty=5, col="darkred")
   mtext("Day", side=1, line=3, cex=1.25)
   box(lwd=1.5)
   
