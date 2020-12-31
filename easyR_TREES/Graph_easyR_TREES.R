@@ -131,7 +131,7 @@ Leaf_Area_Plot<-function(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""
 
 
 
-###Unfinished but this will eventually hold the expressions for all the sim outputs
+###Titles for y-axis for each sim output
 Var_unit<-function(Which_Sim){
   Unit_vector<-c(simET=as.expression(bquote("Evapotranspiration mm "~s^-1)),
                   WPlant_K=as.expression(bquote("Plant hydraulic conductance mmol"~m^-2~s^-1~MPa^-1)),
