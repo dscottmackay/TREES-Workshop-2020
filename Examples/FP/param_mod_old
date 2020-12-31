@@ -1,0 +1,17 @@
+#_of_shoot_modules 1
+leaf_area_fraction 1
+length_lateral    0.48
+length_axial      0.2
+#_of_root_modules  4
+leaf_area_fraction 0.2
+length_lateral     1.0
+length_axial       0.008
+leaf_area_fraction 0.2 
+length_lateral     1.0
+length_axial       0.016
+leaf_area_fraction 0.3 
+length_lateral     1.0
+length_axial       0.024
+leaf_area_fraction 0.3 
+length_lateral     1.0
+length_axial       0.048

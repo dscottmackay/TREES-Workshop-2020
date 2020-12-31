@@ -1,0 +1,12 @@
+FP_Drivers_BLK_1.txt
+1
+param.p
+param_mod
+outputs/FPblk1
+200000
+covfile1
+0.2
+0.25
+30
+1000
+0
