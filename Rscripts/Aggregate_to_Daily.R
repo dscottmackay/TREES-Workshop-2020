@@ -54,4 +54,12 @@ Ksat <- 4.22/(-0.3+2.03) #whole-plant saturated hydraulic conductance
 simulation<-read.table(paste(subfolder,fname,".sim",sep=""),header=TRUE)
 computeDaily(subfolder, fname, simulation, driver, Ksat)
 
+#use these lines for maize
+subfolder <- "Examples/Maize/"
+fname <- "CML103"
+driver<- read.table(paste(subfolder,"LIRFcorn_2013_grow_irrigated",".txt",sep=""), header=TRUE)
+Ksat <- 4.22/(-0.3+1.57) #whole-plant saturated hydraulic conductance
+simulation<-read.table(paste(subfolder,fname,".sim",sep=""),header=TRUE)
+computeDaily(subfolder, fname, simulation, driver, Ksat)
+
 
