@@ -32,7 +32,7 @@
 3.6    act25, (umol/mgRubisco/min) Rubisco activity
 2.4 2.0 3.0    q10act, (DIM) Q_10 for Rubisco activity (default was 2.4)
 48.85 46.0 60.0 Vcmax25, maximum Rubisco activity at 25 C, umol m-2 s-1
-460.0 58.0 100.0 Vpmax25, maximum PEP carbolylase activity at 25 C, umol m-2
+70.0 460.0 100.0 Vpmax25, maximum PEP carbolylase activity at 25 C, umol m-2
 175.0 400.0 400.0 Jmax25, maximum electron transport rate at 25 C, umol m-2 s-1
 38.6 38.6 38.6 gammaStar25, compensation point at 25 C, umol
 80.0 80.0 Kp25, Michaelis constant of PEP carboxylase for CO2 at 25 C, ubar
@@ -53,7 +53,7 @@
 0.09 0.09 0.09 alphaGmax, fraction of glycolate carbon diverted to glycine during photorespiration
 0.38 0.38 0.38 alphaSmax, fraction of glycolate carbon diverted to serine during photorespiration
 1.5 1.5 1.5 Nmax, maximum rate of de novo nitrogen supply to the chloroplast, umol N m-2 s-1
-0.303 0.258 0.215    	Gsref0, reference canopy stomatal conductance (mol m-2 s-1)
+0.27 0.303 0.258     	Gsref0, reference canopy stomatal conductance (mol m-2 s-1)
 0.48 0.487439 0.61  	m (proportion of Gsref0)
 1 1 0  isAmphistomatous, (1 or 0) has stomata on both sides of leaf
 -0.05   Md, used for diagnosing hydraulic model - if pressure goes higher than this value you get an error
@@ -145,7 +145,7 @@
 1 0 1 useHydraulics, set to 1 if you want the full hydraulic model
 0 0 1 useInputStress, little used function allowing for use of previously computed water stress as input
 1 0 1 useInputWaterTable
-213  dayToStopMaizeRefilling, used when both usePhenology and useLeafModule are set to zero (false)
+182 213  dayToStopMaizeRefilling, used when both usePhenology and useLeafModule are set to zero (false)
 0 0 1 useLeafModule, use Brassica rapa vegetative growth sub-model
 11.211 leafAreaMax // K
 0.939134 initialLeafSize //A_pot_in
