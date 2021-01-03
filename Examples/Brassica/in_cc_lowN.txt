@@ -1,0 +1,12 @@
+cc_ww_drivers_drought_validation.txt
+1
+cc_lowN.p
+param_mod
+cc_lowN
+200000
+covfile1
+0.2
+0.25
+30
+1000
+0
