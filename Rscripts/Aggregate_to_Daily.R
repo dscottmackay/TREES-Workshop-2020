@@ -6,7 +6,7 @@
 ####################################
 ## set your working directory and load functions
 ####################################
-setwd(paste("~/Documents/research/projects/TREES-workshop-2020/",sep=""))
+setwd(paste("~/Downloads/TREES-workshop-2020-main/",sep=""))
 source("Rscripts/TREES_aggregation_function.R")
 
 #

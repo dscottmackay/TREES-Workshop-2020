@@ -35,7 +35,7 @@
 #ETo-Daily	
 #Rain-Daily
 #
-setwd(paste("~/Documents/research/projects/TREES-workshop-2020/",sep=""))
+setwd(paste("~/Downloads/TREES-workshop-2020-main/",sep=""))
 subfolder <- "Examples/Maize/"
 weather<-read.csv(paste(subfolder,"weather2013part",".csv",sep=""),header=TRUE)
 
