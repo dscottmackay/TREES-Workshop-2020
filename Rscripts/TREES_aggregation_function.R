@@ -24,7 +24,7 @@
 #MicrobN0	MicrobN1	MicrobN2	MicrobN3	MicrobN4	
 #RhizN-	RhizN+	PlantN	PlantNstat	RL ar0	ar1	ar2	ar3	ar4	
 #
-computeDaily = function(subfolder, fname, simulation, drivers, Ksat)
+computeDaily = function(subfolder, fname, simulation, drivers, Ksat, refillDays)
 {
   simulation$WPlant_K <- as.matrix((simulation$WPlant_K))
   simulation[simulation$WPlant_K >Ksat, "WPlant_K"] <- Ksat
@@ -195,6 +195,16 @@ computeDaily = function(subfolder, fname, simulation, drivers, Ksat)
                             "MicrobN0 (gN m-2 grd)","MicrobN1 (gN m-2 grd)","MicrobN2 (gN m-2 grd)","MicrobN3 (gN m-2 grd)","MicrobN4 (gN m-2 grd)",
                             "PlantN (gN m-2 grd)", "LAI (m2 m-2)", "SLA (m-2 kgC)","RLA (m2 m-2)",
                             "RA0 (m2 m-2","RA1 (m2 m-2)","RA3 (m2 m-2)","RA4 (m2 m-2)","RA4 (m2 m-2)","Reproduction (gC m-2)")
+#
+#Clean up PLC
+#
+  for(i in (nrows-1):1)
+  {
+    if (!is.element(i+1,refillDays))
+      if (result_array[i,"PLC"]>result_array[i+1,"PLC"]) 
+        result_array[i,"PLC"]=result_array[i+1,"PLC"]
+  }
+#
   write.csv(result_array, file=paste(subfolder,fname,"_midday.csv"))
 }
 
