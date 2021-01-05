@@ -5001,8 +5001,8 @@ void BiogeochemicalCycles::updateRhizospherePools(trees_params treesParams,
 //adds microbial rain in to top layer only MCH 05082020
 			if (j == 1)
 			{
-				rhizosphereLiveMicrobialCarbon[1][k] += treesParams.microbialrainrate;
 				CNb = rhizosphereLiveMicrobialCarbon[1][k]/rhizosphereMicrobialNitrogen[1][k];
+				rhizosphereLiveMicrobialCarbon[1][k] += treesParams.microbialrainrate;
 				rhizosphereMicrobialNitrogen[1][k] += treesParams.microbialrainrate / CNb;
 
                                 //extra rain ins added MCH 23092020
