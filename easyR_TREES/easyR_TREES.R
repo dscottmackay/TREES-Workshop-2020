@@ -24,11 +24,11 @@
 
 
 
-##set working directory to where you downloaded off of github. Example:
+##set working directory to where you downloaded off of github. Example if you downloaded it to your desktop:
 #setwd("~/Desktop/TREES-workshop-2020")
 
 
-
+#Run these two lines after setting your working directory.
 source("easyR_TREES/Functions_easyR_TREES.R")
 source("easyR_TREES/Graph_easyR_TREES.R")
 
@@ -39,11 +39,11 @@ source("easyR_TREES/Graph_easyR_TREES.R")
 ########################################## Brassica: Chinese Cabbage ##########################################
 ###############################################################################################################
 
-#Run the TREES model with specified parameters
-Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),#Your destination for TREES outputs.
+#Run the TREES model with specified parameters. See argument comments for explanations.
+Run_easyR_TREES(Result_Dest="easyR_TREES/Outputs",#Your destination for TREES outputs.
                 Init_param="Examples/Brassica/cc.p",#Name and location of initial parameter file.
                 Which_Parameter="microbiomeScalar",#Parameter to modify (MUST MATCH PARAMETER NAME IN .p file exactly).
-                New_values=c(10,20,30,250,500), #A vector of the new values for the specified parameter.
+                New_values=c(100,200,250,300,500), #A vector of the new values for the specified parameter.
                 Use_Gamma=FALSE,#T or F use the growth gamma function.
                 Itter=NULL,#Number of iterations for running over the gamma.
                 Drivers="cc_ww_drivers_drought_validation",#Vector of names of drivers to use.
@@ -51,16 +51,16 @@ Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),#Your d
                 Init_Infile="Examples/Brassica/in_cc_ww.txt",#Name and location of initial infile to be modified.
                 param_mod = "Examples/Brassica/param_mod",#Name and location of param_mod file.
                 covfile="Examples/Brassica/covfile1",#Name and location of covfile.
-                N_cores=6,#Number of cores to use for parrallel runs.
+                N_cores=6,#Number of cores to use for parallel runs. WARNING! This should be at least 1 less than total cores
                 TREES_loc="Model-Code/trees3",#Location of *compiled* TREES model.
                 show_TREES_cout=TRUE#FALSE will hide the trees console readout.
 )
 
 
 #Generate plots of the leaf areas
-Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),#Location you set for TREES outputs.
+Leaf_Area_Plot(Result_Dest="easyR_TREES/Outputs",#Location you set for TREES outputs.
                Which_Parameter="microbiomeScalar",#Parameter that was modified.
-               New_values=c(10,20,30,250,500),#Values parameter was changed to.
+               New_values=c(100,200,250,300,500),#Values parameter was changed to.
                Use_Gamma=FALSE,#Set to TRUE if Gamma was used.
                Itter=NULL,#Number of ittereations if Gamma was used.
                Drivers="cc_ww_drivers_drought_validation",#Vector of the drivers used.
@@ -72,14 +72,14 @@ Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),#Locatio
 
 
 #Generate plots of 
-Sim_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
-         Which_Sim = "MicrobC0",#Name of the ouput in the .sim file that you wish to plot (must match exactly).
+Sim_Plot(Result_Dest="easyR_TREES/Outputs",
+         Which_Sim = "R_total",#Name of the column in the .sim file that you wish to plot (must match exactly).
          Which_Parameter="microbiomeScalar",
-         New_values=c(10,20,30,250,500),
+         New_values=c(100,200,250,300,500),
          Use_Gamma=FALSE,
          Itter=NULL,
          Drivers="cc_ww_drivers_drought_validation",
-         Figure_title="MicrobC0 for high and low SMB scalars",
+         Figure_title=NULL,
          Compare_to=NULL,
          Smooth_on=TRUE
          
@@ -91,10 +91,12 @@ Sim_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
 ######################################### Wisconsin Fast Plant Example ########################################
 ###############################################################################################################
 
-Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+#Run over each driver which corresponds to experimental blocks or different locations.
+
+Run_easyR_TREES(Result_Dest="easyR_TREES/Outputs",
                 Init_param="Examples/FP/paramV10.p",
                 Which_Parameter="microbiomeScalar",
-                New_values=c(25,50,100,200,500,1000), 
+                New_values=c(10,15,20), 
                 Use_Gamma=FALSE,
                 Itter=NULL,
                 Drivers=c("FP_Drivers_BLK_1",
@@ -107,15 +109,16 @@ Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
                 Init_Infile="Examples/FP/in_FP_by_blk.txt",
                 param_mod = "Examples/FP/param_mod",
                 covfile="Examples/FP/covfile1",
-                N_cores=6,
+                N_cores=6,#Remember to change this for your computer
                 TREES_loc="Model-Code/trees3",
                 show_TREES_cout=TRUE
 )
 
 
-Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+#Check the leaf area (keep in mind FP grows leaves in an odd way so the results are actually projected leaf area)
+Leaf_Area_Plot(Result_Dest="easyR_TREES/Outputs",
                Which_Parameter="microbiomeScalar",
-               New_values=c(25,50,100,200,500,1000),
+               New_values=c(10,15,20),
                Use_Gamma=FALSE,Itter=NULL,
                Drivers=c("FP_Drivers_BLK_1",
                          "FP_Drivers_BLK_2",
@@ -145,7 +148,7 @@ Exp_data<- data.frame()
 for(i in 1:6){# 1:6 represent the blocks which correspond to the drivers used in the same order.
   
   Exp_data<-rbind(Exp_data,
-                  read_excel("easyR_TREES/time_course_2018.xlsx", sheet = "data") %>% #raw experimental data
+                  read_excel("easyR_TREES/time_course.xlsx", sheet = "data") %>% #raw experimental data
                     dplyr::select(sampling_day_actual,sampling_time_actual,block,soil_trt,contains("avg")) %>% #Select relevant columns
                     filter(soil_trt=="ATM_BLANK",block==i) %>% #"ATM_BLANK" is no microbial treatment Or "SBC_OLD" for microbial treatment
                     dplyr::select(contains("avg_PA_day")) %>%
@@ -167,9 +170,9 @@ head(Exp_data)#This is what your experimental data should look like
 
 
 #Example plotting with experimental data
-Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+Leaf_Area_Plot(Result_Dest="easyR_TREES/Outputs",
                Which_Parameter="microbiomeScalar",
-               New_values=c(25,50,100,200,500,1000),
+               New_values=c(10,15,20),
                Use_Gamma=FALSE,Itter=NULL,
                Drivers=c("FP_Drivers_BLK_1",
                          "FP_Drivers_BLK_2",
@@ -190,14 +193,16 @@ Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
 ###############################################################################################################
 ##################################### Example of using Gamma ##################################################
 ###############################################################################################################
-
-#This is unrealistic as it would likely take thousands of iterations to get an accurate distribution.
-#This would normally be done on a computing cluster but this example is safe to run on most computers
-Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+#This is an example using the stochastic leaf growth in the leaf growth module. Since the model will sample
+# from a gamma distribution to get an idea of the results distribution you need to run the model through many
+# iterations. Below is an example of how to do this using the easyR_TREES script. This is unrealistic as it 
+# would likely take thousands of iterations to get an accurate distribution but this version is safe for most
+# regular computers to handle. This will run 2 different parameters over 6 drivers for 5 itterations. this will
+# make for a total of 60  simulations. 
+Run_easyR_TREES(Result_Dest="easyR_TREES/Outputs",
                 Init_param="Examples/FP/paramV10.p",
                 Which_Parameter="microbiomeScalar",
-                New_values=c(250,500), #When running gamma keep in mind each modified parameter will be run for 
-                #the number of itterations specified over each block
+                New_values=c(15), #Each new value will run the number of iterations over each block.
                 Use_Gamma=TRUE,#T or F use the growth gamma function
                 Itter=c(1:5),#number of iterations for running over the gamma
                 Drivers=c("FP_Drivers_BLK_1",
@@ -210,44 +215,44 @@ Run_easyR_TREES(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
                 Init_Infile="Examples/FP/in_FP_by_blk.txt",
                 param_mod = "Examples/FP/param_mod",
                 covfile="Examples/FP/covfile1",
-                N_cores=6,
+                N_cores=6,#Remember to change this for your computer
                 TREES_loc="Model-Code/trees3",
                 show_TREES_cout=FALSE
 )
 
 
 
-Leaf_Area_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+Leaf_Area_Plot(Result_Dest="easyR_TREES/Outputs",
                Which_Parameter="microbiomeScalar",
-               New_values=c(25,250),
-               Use_Gamma=TRUE,Itter=c(1:2),
+               New_values=c(15),
+               Use_Gamma=TRUE,Itter=c(1:5),
                Drivers=c("FP_Drivers_BLK_1",
                          "FP_Drivers_BLK_2",
                          "FP_Drivers_BLK_3",
                          "FP_Drivers_BLK_4",
                          "FP_Drivers_BLK_5",
                          "FP_Drivers_BLK_6"),
-               Figure_title="Leaf Area for high and low SMB scalars",
+               Figure_title="Leaf area dist for low SMB scalar",
                Compare_to=Exp_data,
                Smooth_on=FALSE
 )
 
 
 
-Sim_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
+Sim_Plot(Result_Dest="easyR_TREES/Outputs",
          Which_Sim = "PlantNstat",
          Which_Parameter="microbiomeScalar",
-         New_values=c(25,250),
-         Use_Gamma=TRUE,Itter=c(1:2),
+         New_values=c(15),
+         Use_Gamma=TRUE,Itter=c(1:5),
          Drivers=c("FP_Drivers_BLK_1",
                    "FP_Drivers_BLK_2",
                    "FP_Drivers_BLK_3",
                    "FP_Drivers_BLK_4",
                    "FP_Drivers_BLK_5",
                    "FP_Drivers_BLK_6"),
-         Figure_title="PlantNstat for high and low SMB scalars",
+         Figure_title=NULL,
          Compare_to=NULL,
-         Smooth_on=TRUE
+         Smooth_on=FALSE
          
 )
 
@@ -255,6 +260,37 @@ Sim_Plot(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),
 
 
 ###############################################################################################################
+###################################### Try your own data! #####################################################
+###############################################################################################################
+# If your own data isn't available you could practice with some of the examples not used here
+
+Run_easyR_TREES(Result_Dest="easyR_TREES/Outputs",#Your destination for TREES outputs.
+                Init_param="",#Name and location of initial parameter file.
+                Which_Parameter="",#Parameter to modify (MUST MATCH PARAMETER NAME IN .p file exactly).
+                New_values=c(), #A vector of the new values for the specified parameter.
+                Use_Gamma=FALSE,#T or F use the growth gamma function.
+                Itter=NULL,#Number of iterations for running over the gamma.
+                Drivers="",#Vector of names of drivers to use.
+                Driver_loc="",#Location of drivers if not in working directory.
+                Init_Infile="",#Name and location of initial infile to be modified.
+                param_mod = "",#Name and location of param_mod file.
+                covfile="",#Name and location of covfile.
+                N_cores=1,#Number of cores to use for parallel runs. WARNING! This should be at least 1 less than total cores
+                TREES_loc="Model-Code/trees3",#Location of *compiled* TREES model.
+                show_TREES_cout=TRUE#FALSE will hide the trees console readout.
+)
+
+
+
+
+
+
+
+
+
 ###############################################################################################################
 ###############################################################################################################
+###############################################################################################################
+
+
 

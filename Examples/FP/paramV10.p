@@ -133,7 +133,7 @@
 0 usePhenology
 99999999999.0 leafLife Span
 10 max_iteration(the_max_number_of_iterations_to_achieve_convergence_Delta<THR
-400.0 83.3 10.0 microbiomeScalar, unitless, multiplier for the initial nutrient status of microbiome
+15.0 83.3 10.0 microbiomeScalar, unitless, multiplier for the initial nutrient status of microbiome
 0.0 microbialrainrate
 0.0 raininAmmonium
 0.0 raininNitrate
