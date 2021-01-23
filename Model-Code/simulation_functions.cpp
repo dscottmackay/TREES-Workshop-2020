@@ -941,7 +941,7 @@ struct sim_out simulation_functions(
 			state.set_val_at(leafpsi, LPSI);
 			if (HydraulicModelFailCond == 0)
 			{
-				if (isnan(Kl))
+				if (std::isnan(Kl))
 				{
 					Kl = state.get_val_at(KL);
 				}
@@ -953,7 +953,7 @@ struct sim_out simulation_functions(
 				{
 					state.set_val_at(Kl, KL);
 				}
-				if (isnan(leafpsi))
+				if (std::isnan(leafpsi))
 				{
 					leafpsi = state.get_val_at(LPSI);
 				}
@@ -974,7 +974,7 @@ struct sim_out simulation_functions(
 				{
 					state.set_val_at(Ecrit, ECRIT);
 				}
-				if (PsiCrit == 0.0 || isnan(PsiCrit))
+				if (PsiCrit == 0.0 || std::isnan(PsiCrit))
 				{
 					PsiCrit = state.get_val_at(PSICRIT);
 				}
@@ -987,7 +987,7 @@ struct sim_out simulation_functions(
                     	if(HydraulicModelFailCond == 1)
                     	{
                         //	MODELFAIL = 1;
-				if (isnan(Kl))
+				if (std::isnan(Kl))
 				{
 					Kl = state.get_val_at(KL);
 				}
@@ -999,7 +999,7 @@ struct sim_out simulation_functions(
 				{
                                         state.set_val_at(Kl, KL);
 				}
-				if (isnan(leafpsi))
+				if (std::isnan(leafpsi))
 				{
 					leafpsi = state.get_val_at(LPSI);
 				}
@@ -1019,7 +1019,7 @@ struct sim_out simulation_functions(
 				{
                                         state.set_val_at(Ecrit, ECRIT);
 				}
-				if (PsiCrit == 0.0 || isnan(PsiCrit))
+				if (PsiCrit == 0.0 || std::isnan(PsiCrit))
 				{
 					PsiCrit = state.get_val_at(PSICRIT);
 				}
@@ -1408,7 +1408,7 @@ adj_phiJ_shd = phiJ_shd;
 //in this case, we set the Gsres0 scalars (r_sun, r_shd) lower and go again
 //to attempt to prevent hydraulic failure
 //comment out this block if you don't like this
-		if ((is > 1) && (PsiCrit >= treesParams.pd_at_sat_kl || isnan(leafpsi) || 
+		if ((is > 1) && (PsiCrit >= treesParams.pd_at_sat_kl || std::isnan(leafpsi) || 
 								HydraulicModelFailCond == 1))
 		{
 			ModelStatus = 0;

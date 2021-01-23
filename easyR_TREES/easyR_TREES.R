@@ -27,7 +27,6 @@
 ##set working directory to where you downloaded off of github. Example if you downloaded it to your desktop:
 #setwd("~/Desktop/TREES-workshop-2020")
 
-
 #Run these two lines after setting your working directory.
 source("easyR_TREES/Functions_easyR_TREES.R")
 source("easyR_TREES/Graph_easyR_TREES.R")

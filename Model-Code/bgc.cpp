@@ -3940,7 +3940,7 @@ void BiogeochemicalCycles::updateRootCarbonNitrogenPools(trees_params treesParam
 			CN *= rootScalar;
 
 			rootCincrement = (1.0-leafCfraction-stemAllocation)*rgrowth*tgrowth*rootAllocation/0.86;
-if (isnan(rootCincrement))
+if (std::isnan(rootCincrement))
 {
 cout << "BiogeochemicalCycles::updateRootCarbonNitrogenPools():" << endl;
 cout << leafCfraction << '\t' << stemAllocation << '\t' << rgrowth << '\t' << tgrowth << '\t' << N_avail_rate_plant << '\t' << rootAllocation << '\t' << CN << endl;

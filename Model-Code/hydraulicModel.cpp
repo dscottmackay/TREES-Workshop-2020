@@ -1629,14 +1629,14 @@ void HydraulicModel::solveWater(bool silent, bool callRewet, double Ypd[],
                 	if (i == 1)
 			{
                     		pcrit = psi[ii][i][1];
-				if (isnan(pcrit))
+				if (std::isnan(pcrit))
 				{
 					 pcrit = psi[ii][i][1]= ptarg;
 				}
                 	}
 			else
 			{
-                    		if (psi[ii][i][1] < psi[ii][i - 1][1] && !isnan(psi[ii][i][1])) 
+                    		if (psi[ii][i][1] < psi[ii][i - 1][1] && !std::isnan(psi[ii][i][1])) 
 		    		{
                             		pcrit = psi[ii][i][1];
                     		}
