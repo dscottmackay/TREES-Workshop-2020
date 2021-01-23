@@ -13,8 +13,8 @@
 .SUFFIXES: .c .cpp
 
 
-CXX    = c++
-CFLAGS = -O2
+CXX    = g++
+CFLAGS = -O2 -std=gnu++11
 
 CSRC =  \
  bgc.cpp \

@@ -14,8 +14,8 @@
 
 ##################################Load required packages#######################################################
 # List of required packages
-pkgli<-c("crayon","dplyr","tidyr","readr","readxl","withr","ggplot2","ggthemes",
-         "extrafont","parallel","foreach","doParallel","plotly","scales","Cairo")
+pkgli<-c("crayon","dplyr","tidyr","readr","readxl","withr","ggplot2","ggthemes","parallel","foreach","doParallel","scales")#,
+         #"extrafont","Cairo","plotly", "htmlwidgets")#These are only for more fancy graphs
 ## Some of these may not be required at all times so if you have a compatibility issue
 ## try removing the problematic package from here.
 ## For example plotly and htmlwidgets have issues on CCR and are not necessary for current
@@ -81,27 +81,26 @@ Leaf_Area_Plot<-function(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""
     }
     
     Data_in<-Data_in%>% 
-      mutate(Leaf_Area=as.double(Leaf_Area),NewValue=as.factor(NewValue))
+      mutate(Leaf_Area=as.double(Leaf_Area)) %>% 
+      mutate(NewValue=as.character(NewValue))
     
     
     p<-ggplot()+
       theme_minimal()+
-      theme(text=element_text(size=10,  family="DejaVu serif"),
-            legend.text =element_text(size=8,  family="DejaVu serif"),
-            legend.title =element_text(size=8,  family="DejaVu serif") )+
-      scale_color_colorblind(labels = c('TREES', 'Experimental'))+
+      # theme(text=element_text(size=10,  family="DejaVu serif"),
+      #       legend.text =element_text(size=8,  family="DejaVu serif"),
+      #       legend.title =element_text(size=8,  family="DejaVu serif") )+
+      scale_color_colorblind(breaks=c(as.character(New_values),'Experimental'))+
       labs(title = Figure_title,
-           y=expression(paste("Leaf Area ("~cm^2~")" )),
+           y="Leaf Area cm2",#expression(paste("Leaf Area ("~cm^2~")" )),
            col = "Model")
-    if(length(New_values)>1){
-      p<-p+scale_color_colorblind(labels = c(New_values, 'Experimental'))
-    }
+
     
     if(!is.null(Compare_to)){
       if(!Smooth_on){
-        p<-p+geom_boxplot(data=filter(Compare_to,block==which(Drivers==i)),aes(x=Jday,y=Leaf_Area,group=Jday,color="Experimental Data"))
+        p<-p+geom_boxplot(data=filter(Compare_to,block==which(Drivers==i)),aes(x=Jday,y=Leaf_Area,group=Jday,color="Experimental"))
       }else{
-        p<-p+geom_smooth(data=filter(Compare_to,block==which(Drivers==i)),aes(x=Jday,y=Leaf_Area,group=Leaf_number,color="Experimental Data"))
+        p<-p+geom_smooth(data=filter(Compare_to,block==which(Drivers==i)),aes(x=Jday,y=Leaf_Area,group=Leaf_number,color="Experimental"))
       }
     }
     
@@ -116,11 +115,12 @@ Leaf_Area_Plot<-function(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""
         p<-p+geom_smooth(data=Data_in,aes(x=Jday,y=Leaf_Area,group=interaction(Leaf_number,NewValue),color=NewValue))
       }
     }else{
-      p<-p+geom_line(data=Data_in,aes(x=Jday,y=Leaf_Area,group=interaction(Leaf_number,NewValue),color=NewValue))
+      p<-p+geom_line(data=Data_in,aes(x=Jday,y=Leaf_Area,group=interaction(NewValue,Leaf_number),color=NewValue))
     }
     
+
     
-    
+    #saveWidget(ggplotly(p),file=paste(Result_Dest,"/Figures/",i,Figure_title,"_plotly",".html",sep = "")) 
     ggsave(path=paste(Result_Dest,"/Figures",sep=""),filename=paste(i,Figure_title,".pdf",sep=""),plot=p,device=cairo_pdf,height=12,width=20,units = "cm")
     
     
@@ -314,12 +314,12 @@ Sim_Plot<-function(Result_Dest=paste(getwd(),"/easyR_TREES/Outputs",sep=""),#Whe
       theme(text=element_text(size=10,  family="DejaVu serif"),
             legend.text =element_text(size=8,  family="DejaVu serif"),
             legend.title =element_text(size=8,  family="DejaVu serif") )+
-      scale_color_colorblind(labels = c('TREES', 'Experimental'))+
+      scale_color_colorblind(breaks = c('TREES', 'Experimental'))+
       labs(title = Figure_title,
            y=Var_unit(Which_Sim = Which_Sim),
            col = "Model")
     if(length(New_values)>1){
-      p<-p+scale_color_colorblind(labels = c(New_values, 'Experimental'))
+      p<-p+scale_color_colorblind(breaks = c(New_values,'Experimental'))
     }
     
     if(!is.null(Compare_to)){

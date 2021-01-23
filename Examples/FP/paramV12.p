@@ -61,13 +61,13 @@
 4.0 2.5 4.22 e_at_saturated_kl
 4.0 rhizosphere_width_(mm)
 4 soilshells
-0.1 0.21 GMP_(mm)_geometric_mean_particle_diameter
-15.0 12.0 GSD_geometric_standard_deviation_of_particle_size
+0.2 0.1 0.21 GMP_(mm)_geometric_mean_particle_diameter //MCH
+10.0 15.0 12.0 GSD_geometric_standard_deviation_of_particle_size//MCH
 1.5 1.40 1.34 BD_(MG/m3)_soil_bulk_density
-0.35 0.47  porosity
-0.3 0.09 silt_fraction
-0.2 0.17 clay_fraction
-0.07 residual, residual water content m3 m-3
+0.3 0.35 0.47  porosity
+0.25 0.3 0.09 silt_fraction //MCH
+0.1 0.2 0.17 clay_fraction //MCH
+0.17 0.07 residual, residual water content m3 m-3//MCH
 1.0 frac_absorbing_length, keep this at 1 unless you have a good reason to change it
 0.01 0.1 10.0 Capacitance_(mol/Mpa*m2)_on_leaf_area_basis
 1.0 axK:latKr_shoot_modules, keep this at 1 unless you have a good reason to change it
@@ -162,8 +162,8 @@
 5000.0 14000 2566.8275 therm_plant
 1 35.0 projectedArea_init // projected shoot area at initiation
 77 22.6 80 pot_size //max projected area, cm2
-0.24  root_to_shoot
-15.4 35.4    leaf_to_stem
+0.14 0.24 0.14  root_to_shoot //MCH
+1.56  15.4 1.56     leaf_to_stem //MCH
 0 useLeafGamma;
 1.692738 2.684180 15.06098 Kalpha;
 0.125692 0.166705 1.19308 Kbeta;
