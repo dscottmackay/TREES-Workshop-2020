@@ -1065,7 +1065,7 @@ double calc_gvc(double Kl,
 //comment out if you don't want to include canopy height
 	//canopy_ht = 0.0;
 
-	if (soilpsi < 0.0 && Kl > 0.0 && leafpsi < soilpsi && !std::isnan(leafpsi))
+	if (soilpsi < 0.0 && Kl > 0.0 && leafpsi < soilpsi && !isnan(leafpsi))
 	{
 		D_molar = D/pair;
 //Assume mean height to pull water against gravity is at 2/3 canopy height

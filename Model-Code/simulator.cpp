@@ -89,7 +89,7 @@ void simulator(Data_Store& in_data,
 	treesParams.Al = treesParams.lai;
 	treesParams.lai_at_sat_kl= treesParams.Al;
         treesParams.canopy_ht = current_params[i].get_value(); i++; //height of canopy, m
-        treesParams.lai_at_full_canopy_height = current_params[i].get_value(); i++; //fraction cloud cover
+        treesParams.laiFullCanopyHeight = current_params[i].get_value(); i++; //fraction cloud cover
         treesParams.l_angle = current_params[i].get_value(); i++; //leaf angle distribution
         treesParams.canopy_e = current_params[i].get_value(); i++;  //canopy emissivity
         treesParams.fPAR_beam = current_params[i].get_value(); i++;  //fraction of PAR in beam radiation
@@ -712,7 +712,7 @@ void simulator(Data_Store& in_data,
 	//treesParams.Al = max(1.0, treesParams.lai);
 	Al_init = treesParams.Al;
         treesParams.canopy_ht = current_params[i].get_value(); i++; //height of canopy, m
-        treesParams.lai_at_full_canopy_height = current_params[i].get_value(); i++; //fraction cloud cover
+        treesParams.laiFullCanopyHeight = current_params[i].get_value(); i++; //
         treesParams.l_angle = current_params[i].get_value(); i++; //leaf angle distribution
         treesParams.canopy_e = current_params[i].get_value(); i++;  //canopy emissivity
         treesParams.fPAR_beam = current_params[i].get_value(); i++;  //fraction of PAR in beam radiation
@@ -725,7 +725,7 @@ void simulator(Data_Store& in_data,
         treesParams.d_factor = current_params[i].get_value(); i++;  //d = d_factor*canopy_ht
         treesParams.zm_factor = current_params[i].get_value(); i++;  //zm = zm_factor*canopy_ht
         treesParams.zh_factor = current_params[i].get_value(); i++;  //zh = zh_factor*zm
-	treesParams.ps_model = (int) current_params[i].get_value(); i++;  //photosynthesis model to select (1,2, or 3)
+	treesParams.ps_model = static_cast<int>(current_params[i].get_value()); i++;  //photosynthesis model to select (1,2, or 3)
 //Photosynthesis parameters
         treesParams.Rd_mult = current_params[i].get_value(); i++;  //Rd = Rd_mult * Vmax
         treesParams.Jmax_mult = current_params[i].get_value(); i++;  //Jmax = Jmax_mult * Vmax
@@ -768,14 +768,14 @@ void simulator(Data_Store& in_data,
 //Plant hydraulic Parameters
         treesParams.Gsref0 = current_params[i].get_value(); i++;  //maximum gs, molm-2s-1 (leaf hemisurface area)
         double m = current_params[i].get_value(); i++;  //kPa-1 as D in kPa
-	treesParams.isAmphistomatous = (bool) current_params[i].get_value(); i++; //stomata on two sides
+	treesParams.isAmphistomatous = static_cast<bool>(current_params[i].get_value()); i++; //stomata on two sides
         treesParams.Md = current_params[i].get_value(); i++;
         treesParams.midday_at_sat_kl = current_params[i].get_value(); i++;
         treesParams.e_at_saturated_kl= current_params[i].get_value(); i++;
         treesParams.rhizosphere_width= current_params[i].get_value(); i++;
         //treesParams.E_inc= current_params[i].get_value(); i++;
 	treesParams.E_inc=0.0001;
-        treesParams.soilshells= (int) current_params[i].get_value(); i++;
+        treesParams.soilshells= static_cast<int>(current_params[i].get_value()); i++;
         treesParams.GMP= current_params[i].get_value(); i++;
         treesParams.GSD= current_params[i].get_value(); i++;
         treesParams.BD= current_params[i].get_value(); i++;
@@ -853,7 +853,7 @@ void simulator(Data_Store& in_data,
         treesParams.minRootLifespan = current_params[i].get_value(); i++;  //
         treesParams.LWP_spring_minimum = current_params[i].get_value(); i++;  //
         treesParams.LWP_stomatal_closure = current_params[i].get_value(); i++;  //
-        treesParams.is_bryophyte = (int) current_params[i].get_value(); i++;  //
+        treesParams.is_bryophyte = static_cast<int>(current_params[i].get_value()); i++;  //
         treesParams.capRiseScalar = current_params[i].get_value(); i++;  //
 //How to to multiple precipitation by for experimental drought designs
         double precipReduction = current_params[i].get_value(); i++;  //
@@ -866,10 +866,10 @@ void simulator(Data_Store& in_data,
         treesParams.leafNSCscalar = current_params[i].get_value(); i++;
 //What are these for?
 
-        treesParams.usePhenology= (bool) current_params[i].get_value(); i++;
+        treesParams.usePhenology= static_cast<bool>(current_params[i].get_value()); i++;
         treesParams.leafLifeSpan= current_params[i].get_value(); i++;
 //Maximum number of iterations to achieve convergence of DELTA
-        treesParams.max_iterations = (int) current_params[i].get_value(); i++;
+        treesParams.max_iterations = static_cast<int>(current_params[i].get_value()); i++;
 //Conductance to use for Darcy's Law, 1=WholePlant,2=AxialComponents, 3=Shoot,4=AxialRoot, 5=LaterialRoot
         treesParams.microbiomeScalar = current_params[i].get_value(); i++;
 // MCH 07082020
@@ -884,13 +884,13 @@ void simulator(Data_Store& in_data,
         treesParams.snowpack_E_deficit_max = current_params[i].get_value(); i++; //
         treesParams.melt_Rcoef = current_params[i].get_value(); i++; //
 //Run with full hydraulics or not (1 = yes, 0 = no)
-        treesParams.useHydraulics = (bool) current_params[i].get_value(); i++; //
-        treesParams.useInputStress = (bool) current_params[i].get_value(); i++; //
-        treesParams.useInputWaterTable = (bool) current_params[i].get_value(); i++; //
+        treesParams.useHydraulics = static_cast<bool>(current_params[i].get_value()); i++; //
+        treesParams.useInputStress = static_cast<bool>(current_params[i].get_value()); i++; //
+        treesParams.useInputWaterTable = static_cast<bool>(current_params[i].get_value()); i++; //
         treesParams.dayToStopMaizeRefilling = current_params[i].get_value(); i++; //
 	treesParams.allowLeafRefilling = true;
 //Leaf growth module parameters
-        treesParams.useLeafModule = (bool) current_params[i].get_value(); i++; //
+        treesParams.useLeafModule = static_cast<bool>(current_params[i].get_value()); i++; //
         treesParams.leafAreaMax = current_params[i].get_value(); i++; //
         treesParams.initialLeafSize = current_params[i].get_value(); i++; //
         treesParams.leafArea_Rate = current_params[i].get_value(); i++; //
@@ -908,7 +908,7 @@ void simulator(Data_Store& in_data,
     	treesParams.pot_size = current_params[i].get_value(); i++; //
     	treesParams.root_to_shoot = current_params[i].get_value(); i++; //
     	treesParams.leaf_to_stem = current_params[i].get_value(); i++; //
-        treesParams.useLeafGamma = (bool) current_params[i].get_value(); i++; //
+        treesParams.useLeafGamma = static_cast<bool>(current_params[i].get_value()); i++; //
         treesParams.Kalpha = current_params[i].get_value(); i++; //
         treesParams.Kbeta = current_params[i].get_value(); i++; //
         treesParams.Nalpha = current_params[i].get_value(); i++; //
@@ -955,7 +955,7 @@ void simulator(Data_Store& in_data,
 	//cout << "bubbling_pressure = " << bubbling_pressure << endl;
 	//cout << "pore_size_index = " << pore_size_index << endl;
 	//cout << "residual = " << residual << endl;
-	//cout << "fc = " << fieldCapacity << endl;
+	cout << "fc = " << fieldCapacity << endl;
 
 //Initialize state variables here
 	Var_Dictionary vd;
@@ -1354,7 +1354,7 @@ cout << "rootArea = " << rootArea << endl;
 					treesParams.updatedHydraulics = true;
 					//if (yday < 200)
 					//if (yday < 252)
-					if (yday < treesParams.dayToStopMaizeRefilling)
+					if (yday < treesParams.dayToStopMaizeRefilling && treesParams.lai <= 2.2)
 					{
 						treesParams.allowLeafRefilling = true;
 					}
@@ -1647,14 +1647,12 @@ cout << "rootArea = " << rootArea << endl;
         InnerStep.clear();
        	GSI_vector.clear();
        	EcState.clear();
-	delete hydraulicModel;
-/*
         if (treesParams.useHydraulics == true)
         {
 		free3DArray(psi, NREC, MD);	
 		free2DArray(rflux, NREC);
         }
-*/
+	delete hydraulicModel;
 
 } //end simulator
 
@@ -1710,7 +1708,7 @@ void simulator(Data_Store& in_data,
 	treesParams.Al = max(1.0, treesParams.lai);
 	treesParams.lai_at_sat_kl = treesParams.Al;
         treesParams.canopy_ht = current_params[i].get_value(); i++; //height of canopy, m
-        treesParams.lai_at_full_canopy_height = current_params[i].get_value(); i++; //fraction cloud cover
+        treesParams.laiFullCanopyHeight = current_params[i].get_value(); i++; //fraction cloud cover
         treesParams.l_angle = current_params[i].get_value(); i++; //leaf angle distribution
         treesParams.canopy_e = current_params[i].get_value(); i++;  //canopy emissivity
         treesParams.fPAR_beam = current_params[i].get_value(); i++;  //fraction of PAR in beam radiation

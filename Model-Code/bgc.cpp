@@ -19,6 +19,7 @@
 
 BiogeochemicalCycles::BiogeochemicalCycles()
 {
+	cout << "Clearing out BGC" << endl;
 	leafResidueCarbon = NULL;
 	leafResidueNitrogen = NULL;
 	stemResidueCarbon = NULL;
@@ -109,6 +110,7 @@ BiogeochemicalCycles::BiogeochemicalCycles(trees_params& treesParams)
 
 BiogeochemicalCycles::~BiogeochemicalCycles()
 {
+	cout << "Deconstructing bgc" << endl;
 	clearPools();
 }
 
@@ -3193,11 +3195,11 @@ void BiogeochemicalCycles::computeNfluxes(trees_params treesParams,
 			rootNfract = getRootN(j, k)/(singleRootN+0.0000001);
 			if (leafNfract > nfract*rootNfract)
 			{
-				C = 0.16*leafNstore*(singleRootN/(rootNitrogen+0.00000001));
+				C = 0.16*leafNstore*(singleRootN/(rootNitrogen+0.0000001));
 			}
 			else if (leafNfract < nfract*rootNfract)
 			{
-				C = 0.16*getRootN(j, k)*(singleRootN/(rootNitrogen+0.00000001));
+				C = 0.16*getRootN(j, k)*(singleRootN/(rootNitrogen+0.0000001));
 			}
 			else
 			{
@@ -3407,39 +3409,43 @@ void BiogeochemicalCycles::computeLeafAllocation(trees_params& treesParams,
 
 //---------------------------------------
 //For Maize reproduction - DSM September 2019
-	//if (yday > 150 && yday < 200)
-	if (yday > 163 && yday < 215)
+	if (yday > 150 && yday < 200)
+	//if (yday > 163 && yday < 215)
 	{
 		for (int k = 0; k < nRootOrders; k++)
 		{
 			rhizosphereNitrateNitrogen[0][k] += 0.05/48.0;
 		}
 	}
-	//if (treesParams.usePhenology == 0 && treesParams.useLeafModule == 0 && 
-	//	(treesParams.live_lai > treesParams.lai_at_full_canopy_height || yday > 200))
-	//if (treesParams.usePhenology == 0 && treesParams.useLeafModule == 0 && 
-	//	(treesParams.live_lai > treesParams.lai_at_full_canopy_height || yday > 210))
+	reproduction = 0.0;
 	if (treesParams.usePhenology == 0 && treesParams.useLeafModule == 0 && 
-		(treesParams.live_lai > 0.99*treesParams.lai_at_full_canopy_height))
+		(treesParams.live_lai > 0.99*treesParams.laiFullCanopyHeight ||
+			yday > 210))
 	{
 		nsc = getLeafNSC()+getStemNSC();
-		//if (yday > 200 || (yday > 193 && treesParams.live_lai > treesParams.lai_at_full_canopy_height))
-		if (yday > 210 || (yday > 203 && treesParams.live_lai > 0.99*treesParams.lai_at_full_canopy_height))
+		if (yday >= 250)
 		{
-			//reproduction = rgrowth*N_avail_rate_plant*kratio;
-			if (rgrowth > 0.8*0.95*nsc)
-			{
-				reproduction = 0.8*0.95*nsc;
-			}
-			else
-			{
-				reproduction = 0.8*rgrowth;
-			}
+			reproduction = 0.95*rgrowth;
+			rgrowth *= 0.05;
 		}
+		else if (yday >= 215)
+		{
+			reproduction = 0.9*rgrowth;
+			rgrowth *= 0.1;
+		}
+		else if (yday >= 210)
+		{
+			reproduction = 0.80*rgrowth;
+			rgrowth *= 0.20;
+		}
+/*
 		else
 		{
-			reproduction = 0.0;
+			reproduction = 0.8*rgrowth;
+			rgrowth *= 0.2;
 		}
+*/
+		if (reproduction > 0.95*nsc) reproduction = 0.95*nsc;
 		if (reproduction / CN > 0.95 * leafStoredNitrogen[0])
 		{
 			reproduction = CN * 0.95 * leafStoredNitrogen[0];
@@ -3455,8 +3461,12 @@ void BiogeochemicalCycles::computeLeafAllocation(trees_params& treesParams,
 		stemNSC[0] -= fromStem*reproduction;
 		leafNSC[0] -= (1.0-fromStem)*reproduction;
 		leafStoredNitrogen[0] -= reproduction / CN;
-		leafCfraction *= 0.01;
-		rgrowth *= 0.2;
+		if (treesParams.live_lai > 0.99*treesParams.laiFullCanopyHeight)
+		{
+			leafCfraction *= exp(-10.0*(treesParams.live_lai-treesParams.laiFullCanopyHeight));
+			//if (yday >= 210) leafCfraction *= exp(-4.0);
+			//else leafCfraction *= exp(-2.0);
+		}
 	}
 //--------------------------------------
 
@@ -3889,13 +3899,14 @@ void BiogeochemicalCycles::updateRootCarbonNitrogenPools(trees_params treesParam
 //differences will be captured between root depths based on C:N
 //e.g., McCormack et al 2012. Predicting fine root lifespan from plant functional traits in
 //		temperate trees. New Phytologist, 195, 823-831.
-		CN = fineRootBiomassCarbon[j][0] / (fineRootBiomassNitrogen[j][0] + 0.000001);
+		CN = fineRootBiomassCarbon[j][0] / (fineRootBiomassNitrogen[j][0] + 0.0000001);
 		if (CN > treesParams.fr_maxCN)
 		{
 			CN = treesParams.fr_maxCN;
 		}
+if (CN < 0.0) cout << fineRootBiomassCarbon[j][0] << '\t' << fineRootBiomassNitrogen[j][0] << endl;
                 rootLifeSpan = refLifeSpan*CN/20.0;
-		assert(rootLifeSpan > 0.000001);
+		assert(rootLifeSpan > 0.0000001);
 //increase the rate of growth linearly with root temperature above 5 C until root warms to 25 C
 //reduce root growth at temperatures higher than 25 C
 		tgrowth = 0.0;
@@ -3916,8 +3927,9 @@ void BiogeochemicalCycles::updateRootCarbonNitrogenPools(trees_params treesParam
                 for (int k = 0; k < nFineRootOrders; k++)
                 {
 //compute root mortality
-			CN = fineRootBiomassCarbon[j][k] / fineRootBiomassNitrogen[j][k];
-			rootCdecrement = tgrowth*fineRootBiomassCarbon[j][k]/(rootLifeSpan+0.000001);
+			CN = fineRootBiomassCarbon[j][k] / (fineRootBiomassNitrogen[j][k]+0.0000001);;
+			rootCdecrement = tgrowth*fineRootBiomassCarbon[j][k]/(rootLifeSpan+0.0000001);
+			if (rootCdecrement > fineRootBiomassCarbon[j][k]) rootCdecrement = 0.1*fineRootBiomassCarbon[j][k];
                         fineRootBiomassCarbon[j][k] -= rootCdecrement;
 			fineRootBiomassNitrogen[j][k] -= rootCdecrement/CN;
 //change in residue for updating rhizosphere additions (ADD)
@@ -3940,7 +3952,7 @@ void BiogeochemicalCycles::updateRootCarbonNitrogenPools(trees_params treesParam
 			CN *= rootScalar;
 
 			rootCincrement = (1.0-leafCfraction-stemAllocation)*rgrowth*tgrowth*rootAllocation/0.86;
-if (std::isnan(rootCincrement))
+if (isnan(rootCincrement))
 {
 cout << "BiogeochemicalCycles::updateRootCarbonNitrogenPools():" << endl;
 cout << leafCfraction << '\t' << stemAllocation << '\t' << rgrowth << '\t' << tgrowth << '\t' << N_avail_rate_plant << '\t' << rootAllocation << '\t' << CN << endl;
@@ -3980,6 +3992,8 @@ exit(1);
                         fineRootLow -= 0.02;
                         fineRootHigh *= 0.5;
 			rootScalar *= 1.25;
+			if (fineRootBiomassCarbon[j][k] < 0.0) fineRootBiomassCarbon[j][k] = 0.00001;
+			if (fineRootBiomassNitrogen[j][k] < 0.0) fineRootBiomassNitrogen[j][k] = 0.0000001;
                 }
 //
 //coarse root dynamics
@@ -3988,7 +4002,8 @@ exit(1);
                 {
 			CN = coarseRootBiomassCarbon[j][k]/coarseRootBiomassNitrogen[j][k];
 //kill off roots
-			rootCdecrement = tgrowth*coarseRootBiomassCarbon[j][k]/(rootLifeSpan+0.000001);
+			rootCdecrement = tgrowth*coarseRootBiomassCarbon[j][k]/(rootLifeSpan+0.0000001);
+			if (rootCdecrement > coarseRootBiomassCarbon[j][k]) rootCdecrement = 0.1*coarseRootBiomassCarbon[j][k];
                         coarseRootBiomassCarbon[j][k] -= rootCdecrement;
                         coarseRootBiomassNitrogen[j][k] -= rootCdecrement/CN;
 //change in residue for updating rhizosphere additions (ADD)
@@ -4044,6 +4059,8 @@ exit(1);
                         rootLifeSpan *= treesParams.rootDiamMultiplier; 
                         fineRootLow -= 0.02;
                         fineRootHigh *= 0.5;
+			if (coarseRootBiomassCarbon[j][k] < 0.0) coarseRootBiomassCarbon[j][k] = 0.00001;
+			if (coarseRootBiomassNitrogen[j][k] < 0.0) coarseRootBiomassNitrogen[j][k] = 0.0000001;
                 }
 	}
 }
@@ -4393,12 +4410,12 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 //conc = g m-2 / (m3 m-2) = g m-3 water
 			a = 1.0; //for mobile nitrate ion
 //N solubility declines at lower soil moisture
-			if (thetaSoil[j] < field_capacity)
+			if (thetaSoil[j] < field_capacity && thetaSoil[j] > 0.000001)
 			{
-				a *= sqrt(thetaSoil[j]/field_capacity+0.00000001);
+				a *= sqrt(thetaSoil[j]/field_capacity+0.000001);
 			}
 			a *= passiveNitrogenDemand;
-			concentration = a * rhizosphereNitrateNitrogen[j][k] * 0.1 / (rhizWaterVolume+0.0000001);
+			concentration = a * rhizosphereNitrateNitrogen[j][k] * 0.1 / (rhizWaterVolume+0.00001);
 
 //UPp = g m-3 x m3 30min-1 m-2 = g m-2 30min-1
 			UPp = concentration * fluxM * rootFract;
@@ -4425,7 +4442,7 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 				leafNSC[0] -= CostUP;
 			}
 			UP_neg_p += UPp*10.0;
-			UP_neg[j][k] = UPp/rhizVolume;
+			UP_neg[j][k] = UPp/(rhizVolume+0.00001);
 			rootMineralNitrogen[j][k] += UPp*10.0;
 //active nitrate uptake
 //DEM_neg has units kg N ha-1
@@ -4475,7 +4492,7 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 				rootNSC[j][k] -= CostUP;
 			}
 			UP_neg_a += UPa*10.0;
-			UP_neg[j][k] += UPa/rhizVolume;
+			UP_neg[j][k] += UPa/(rhizVolume+0.0000001);
 
 //Add in the cost of reducing nitrate to ammonium for assimilation
 //  cost of nitrate reduction is 8 mol H (mol N)-1
@@ -4511,15 +4528,15 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 //passive ammonium uptake
 			a = 0.1; //assumes that most ammonium is absorbed in soil matrix
 //N solubility declines at lower soil moisture
-			if (thetaSoil[j] < field_capacity)
+			if (thetaSoil[j] < field_capacity && thetaSoil[j] > 0.000001)
 			{
-				a *= sqrt(thetaSoil[j]/field_capacity+0.00000001);
+				a *= sqrt(thetaSoil[j]/field_capacity+0.000001);
 			}
 			a *= passiveNitrogenDemand;
 			concentration = a * rhizosphereAmmoniumNitrogen[j][k] * 0.1 / (rhizWaterVolume+0.0000001);
 			UPp = concentration * fluxM * rootFract;
 			UP_pos_p += UPp*10.0;
-			UP_pos[j][k] = UPp/rhizVolume;
+			UP_pos[j][k] = UPp/(rhizVolume+0.0000001);
 			rootMineralNitrogen[j][k] += UPp*10.0;
 //active ammonium uptake
 			DEM_pos_A = DEM_pos * 0.1;
@@ -4562,7 +4579,7 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 				rootNSC[j][k] -= CostUP;
 			}
 			UP_pos_a += UPa*10.0;
-			UP_pos[j][k] += UPa/rhizVolume;
+			UP_pos[j][k] += UPa/(rhizVolume+0.0000001);
 //move active N uptake to root
 //convert from g m-3 to kg ha-1
 			rootMineralNitrogen[j][k] += UPa*10.0; 
@@ -4592,18 +4609,11 @@ void BiogeochemicalCycles::computeRootNitrogenUptake(double UP_neg[][10],
 //
 //Compute plantNstatus, with a range of 0 to 1.
 //This assumes that available NSC determines an optimal amount of available N
-	CN = getLeafBiomassCarbon() / getLeafBiomassN();
-	//CN = treesParams.leaf_minCN;
-	plantNstatus[0] = leafToRootCratio * CN * (leafStoredNitrogen[0] / (getLeafNSC()+0.000001));
-	//plantNstatus[0] = min(leafToRootCratio, (leafStoredNitrogen[0] / getLeafNSC()) * treesParams.leaf_minCN);
-	//plantNstatus[0] = min(leafToRootCratio, (leafStoredNitrogen[0] / getLeafNSC()) * CN);
-	//plantNstatus[0] = leafToRootCratio * min(1.0, CN * (leafStoredNitrogen[0] / getLeafNSC()));
-	CN = getFineRootCarbon() / getFineRootBiomassN();
-	//CN = treesParams.fr_minCN;
-	plantNstatus[0] += (1.0-leafToRootCratio) * CN * (getFineRootN() / (getFineRootNSC()+0.000001));
-	//plantNstatus[0] += min((1.0-leafToRootCratio), (getFineRootN() / getFineRootNSC()) * treesParams.fr_minCN);
-	//plantNstatus[0] += min((1.0-leafToRootCratio), (getFineRootN() / getFineRootNSC()) * CN);
-	//plantNstatus[0] += (1.0-leafToRootCratio) * min(1.0, CN * (getFineRootN() / getFineRootNSC()));
+	CN = getLeafBiomassCarbon() / (getLeafBiomassN()+0.0000001);
+	plantNstatus[0] = leafToRootCratio * CN * (leafStoredNitrogen[0] / (getLeafNSC()+0.0000001));
+	CN = getFineRootCarbon() / (getFineRootBiomassN()+0.0000001);
+	plantNstatus[0] += (1.0-leafToRootCratio) * CN * (getFineRootN() / (getFineRootNSC()+0.0000001));
+
 
 	if (plantNstatus[0] > 1.0)
 	{
@@ -4870,9 +4880,9 @@ void BiogeochemicalCycles::updateRhizospherePools(trees_params treesParams,
 		for (int k = 0; k < nRootOrders; k++)
 		{
 			rhizVolume = computeRhizosphereVolume(j, k, porosity, rootRadius, rhizWidth);
-			if (rhizVolume < 0.000001)
+			if (rhizVolume < 0.0000001)
 			{
-				rhizVolume = 0.000001;
+				rhizVolume = 0.0000001;
 			}
 //Convert mass per area units to concentration by volume
 //  	kg ha-1 * (1/10000) ha m-2 * 1000 g kg-1 / (m3 m-2) = g m-3
@@ -5001,8 +5011,8 @@ void BiogeochemicalCycles::updateRhizospherePools(trees_params treesParams,
 //adds microbial rain in to top layer only MCH 05082020
 			if (j == 1)
 			{
-				CNb = rhizosphereLiveMicrobialCarbon[1][k]/rhizosphereMicrobialNitrogen[1][k];
 				rhizosphereLiveMicrobialCarbon[1][k] += treesParams.microbialrainrate;
+				CNb = rhizosphereLiveMicrobialCarbon[1][k]/rhizosphereMicrobialNitrogen[1][k];
 				rhizosphereMicrobialNitrogen[1][k] += treesParams.microbialrainrate / CNb;
 
                                 //extra rain ins added MCH 23092020

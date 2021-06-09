@@ -82,7 +82,7 @@ struct trees_params {
 	double dead_lai_drop_rate;
 	double canopy_cover;
 	double canopy_ht;
-	double lai_at_full_canopy_height;
+	double laiFullCanopyHeight;
 	double l_angle;
 	double canopy_e;
 	double fPAR_beam;

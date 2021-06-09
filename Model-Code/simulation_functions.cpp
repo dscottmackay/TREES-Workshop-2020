@@ -147,6 +147,7 @@ struct sim_out simulation_functions(
 	double total_lai;
         double canopy_cover = treesParams.canopy_cover;
         double canopy_ht = treesParams.canopy_ht;
+	double laiFullCanopyHeight = treesParams.laiFullCanopyHeight;
 	double temp_ht = canopy_ht;
         //double fcloud = treesParams.fcloud;
         double l_angle = treesParams.l_angle;
@@ -556,7 +557,12 @@ struct sim_out simulation_functions(
 //DSM October 2019
 //Added to grow plant height for aerodynamic conductance calculations
 //
-	canopy_ht *= min(lai,treesParams.lai_at_full_canopy_height) / max(0.01,treesParams.lai_at_full_canopy_height);
+	//canopy_ht *= min(lai,laiFullCanopyHeight) / max(0.01,laiFullCanopyHeight) + 0.000001;
+
+	if (treesParams.usePhenology == 0 && treesParams.useLeafModule == 0 && lai < laiFullCanopyHeight)
+	{
+		canopy_ht *= lai/(laiFullCanopyHeight+0.000001);
+	}
 
 //stability calculations
 	if (u_ref < 0.3)
@@ -941,7 +947,7 @@ struct sim_out simulation_functions(
 			state.set_val_at(leafpsi, LPSI);
 			if (HydraulicModelFailCond == 0)
 			{
-				if (std::isnan(Kl))
+				if (isnan(Kl))
 				{
 					Kl = state.get_val_at(KL);
 				}
@@ -953,7 +959,7 @@ struct sim_out simulation_functions(
 				{
 					state.set_val_at(Kl, KL);
 				}
-				if (std::isnan(leafpsi))
+				if (isnan(leafpsi))
 				{
 					leafpsi = state.get_val_at(LPSI);
 				}
@@ -974,7 +980,7 @@ struct sim_out simulation_functions(
 				{
 					state.set_val_at(Ecrit, ECRIT);
 				}
-				if (PsiCrit == 0.0 || std::isnan(PsiCrit))
+				if (PsiCrit == 0.0 || isnan(PsiCrit))
 				{
 					PsiCrit = state.get_val_at(PSICRIT);
 				}
@@ -987,7 +993,7 @@ struct sim_out simulation_functions(
                     	if(HydraulicModelFailCond == 1)
                     	{
                         //	MODELFAIL = 1;
-				if (std::isnan(Kl))
+				if (isnan(Kl))
 				{
 					Kl = state.get_val_at(KL);
 				}
@@ -999,7 +1005,7 @@ struct sim_out simulation_functions(
 				{
                                         state.set_val_at(Kl, KL);
 				}
-				if (std::isnan(leafpsi))
+				if (isnan(leafpsi))
 				{
 					leafpsi = state.get_val_at(LPSI);
 				}
@@ -1019,7 +1025,7 @@ struct sim_out simulation_functions(
 				{
                                         state.set_val_at(Ecrit, ECRIT);
 				}
-				if (PsiCrit == 0.0 || std::isnan(PsiCrit))
+				if (PsiCrit == 0.0 || isnan(PsiCrit))
 				{
 					PsiCrit = state.get_val_at(PSICRIT);
 				}
@@ -1408,8 +1414,10 @@ adj_phiJ_shd = phiJ_shd;
 //in this case, we set the Gsres0 scalars (r_sun, r_shd) lower and go again
 //to attempt to prevent hydraulic failure
 //comment out this block if you don't like this
-		if ((is > 1) && (PsiCrit >= treesParams.pd_at_sat_kl || std::isnan(leafpsi) || 
-								HydraulicModelFailCond == 1))
+		if ((is > 1) && (PsiCrit >= treesParams.pd_at_sat_kl || 
+					isnan(leafpsi) || 
+					Ec_ > Ecrit ||
+					HydraulicModelFailCond == 1))
 		{
 			ModelStatus = 0;
 			Converged = false;
