@@ -60,16 +60,16 @@ clean:
 #  ---------------------------  $(EXE) Program builds:  -----------------
 
 calcRhat : calcRhat.o util.o
-	$(CXX) $(CFLAGS)} $^ -o $@
+	$(CXX) $(CFLAGS) $^ -o $@
 
 calcVmat : calcVmat.o util.o
-	$(CXX) $(CFLAGS)} $^ -o $@
+	$(CXX) $(CFLAGS) $^ -o $@
 
 getPIL : getPIL.o simulator.o simulation_functions.o process_functions.o hydraulicModel.o data_store.o state_store.o dictionary.o parameter.o time_keeper.o data.o randomize.o util.o
-	$(CXX) $(CFLAGS)} $^ -o $@
+	$(CXX) $(CFLAGS) $^ -o $@
 
 getPost : getPost.o util.o
-	$(CXX) $(CFLAGS)} $^ -o $@
+	$(CXX) $(CFLAGS) $^ -o $@
 
 trees3 : trees_main.o simulator.o simulation_functions.o process_functions.o hydraulicModel.o bgc.o data_store.o state_store.o dictionary.o parameter.o time_keeper.o data.o randomize.o util.o
 	$(CXX) $(CFLAGS) $^ -o $@
@@ -98,10 +98,10 @@ simulator.o             : constants.h simulator2.h parameter.h randomize.h util.
 simulator.o             : state_store.h dictionary.h data.h data_store.h time_keeper.h
 state_store.o           : state_store.h dictionary.h
 time_keeper.o           : time_keeper.h  constants.h util.h
-trees_main.o            : trees_main.h simulator2.h 
+trees_main.o            : trees_main.h simulator2.h
 trees_main.o            : parameter.h randomize.h util.h state_store.h dictionary.h
 trees_main.o            : data.h constants.h data_store.h time_keeper.h
-util.o                  : util.h 
+util.o                  : util.h
 
 
 ##  ---------------------------  Additional related programs:  -----------------
